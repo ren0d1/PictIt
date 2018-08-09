@@ -1,0 +1,15 @@
+.nav-menu{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.mat-sidenav{
+    background-color: #673ab7;
+}
+
+.mat-nav-list .mat-list-item{
+    color: rgba(255, 255, 255, .87);
+}

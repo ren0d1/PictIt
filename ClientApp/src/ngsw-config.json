@@ -1,0 +1,29 @@
+{
+    "index": "/index.html",
+    "assetGroups": [{
+      "name": "PictIt",
+      "installMode": "prefetch",
+      "resources": {
+        "files": [
+          "/pictit.png",
+          "/favicon.ico",
+          "/manifest.json",
+          "/index.html"
+        ],
+        "versionedFiles": [
+          "/*.bundle.css",
+          "/*.bundle.js",
+          "/*.chunk.js"
+        ]
+      }
+    }, {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/assets/**"
+        ]
+      }
+    }]
+  }
