@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
   ]);
 
   loginForm: FormGroup;
+  sent = false;
   returnUrl = '';
 
   ngOnInit() {
@@ -38,6 +39,11 @@ export class LoginComponent implements OnInit {
     this.activeRoute.queryParams.subscribe(params => {
       this.returnUrl = params['returnUrl'];
     });
+  }
+
+  doSomething(form: HTMLFormElement) {
+    this.sent = true;
+    form.submit();
   }
 
   // tryFacebook() {
@@ -64,9 +70,12 @@ export class LoginComponent implements OnInit {
   // }
 
   tryFacebook() {
-    console.log('trying facebook');
+    const encodeGetParams = p => Object.entries(p).map(kv => kv.map(encodeURIComponent).join('=')).join('&');
+    const params = {
+      provider: 'Facebook',
+      returnUrl: this.returnUrl
+    };
 
-    window.location.href = 'https://www.facebook.com/v3.1/dialog/oauth?&response_type=token' +
-    '&client_id=185375462328710&redirect_uri=https://localhost:44399/auth-callback&scope=email';
+    window.location.href = 'https://localhost:44399/api/user/externallogin?' + encodeGetParams(params);
   }
 }

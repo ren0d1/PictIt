@@ -1,4 +1,4 @@
-<form id="LoginForm" #LoginForm name="LoginForm" [formGroup]="loginForm" autocomplete="on" action="/api/user/login" method="POST">
+<form [hidden]="sent" id="LoginForm" name="LoginForm" [formGroup]="loginForm" autocomplete="on" action="/api/user/login" method="POST" (submit)="doSomething(this)">
   <mat-form-field>
     <input matInput type="email" form="LoginForm" name="Email" placeholder="Email *" [formControl]="emailFormControl" autocomplete="email" maxlength="255">
     <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
@@ -16,6 +16,12 @@
     </mat-error>
   </mat-form-field>
   <input type="hidden" name="ReturnUrl" value="{{returnUrl}}">
-  <button mat-raised-button type="submit" color="primary" form="LoginForm" (click)="LoginForm.submit()" [disabled]="!loginForm.valid">Login</button>
+  <button mat-raised-button type="submit" color="primary" form="LoginForm" [disabled]="!loginForm.valid">Login</button>
 </form>
-<button (click)="tryFacebook()">Facebook</button>
+<button *ngIf="!sent" (click)="tryFacebook()">Facebook</button>
+<main *ngIf="sent">
+  <div  class="bar">
+    <div class="circle"></div>
+    <p>Logging in in progress</p>
+  </div>
+</main>

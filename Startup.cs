@@ -103,8 +103,6 @@
                 .AddFacebook(
                     options =>
                     {
-                        options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-
                         options.AppId = _configuration["Facebook:AppId"];
                         options.AppSecret = _configuration["Facebook:AppSecret"];
                     });

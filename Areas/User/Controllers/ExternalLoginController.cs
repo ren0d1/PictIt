@@ -7,7 +7,7 @@
     using System.Threading.Tasks;
 
     using IdentityModel;
-
+    using IdentityServer4;
     using IdentityServer4.Events;
     using IdentityServer4.Services;
 
@@ -50,7 +50,7 @@
             }
 
             // start challenge and roundtrip the return URL and scheme 
-            string redirectUri = $"https://localhost:44399/api/user/externallogin/callback?returnUrl={returnUrl}";
+            string redirectUri = Url.Action("Callback", new { returnUrl });
 
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUri);
 
@@ -85,8 +85,10 @@
             }
             else
             {
-                // If the user does not have an account, then ask the user to create an account.
-                return new BadRequestObjectResult("no account");
+                var user = await _userManager.FindByEmailAsync("mytestemail@email.com");
+                var test = await _userManager.AddLoginAsync(user, info);
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return LocalRedirect(returnUrl);
             }
         }
     }
