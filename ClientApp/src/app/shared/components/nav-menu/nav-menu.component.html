@@ -32,7 +32,7 @@
             <button *ngIf="!loggedIn" mat-icon-button (click)="register()">
                 <mat-icon>person_add</mat-icon>
             </button>
-            <button *ngIf="loggedIn" mat-icon-button (click)="login()">
+            <button *ngIf="loggedIn" mat-icon-button (click)="logout()">
                 <mat-icon style="color: yellowgreen">settings_power</mat-icon>
             </button>
             <button *ngIf="!loggedIn" mat-icon-button (click)="login()">

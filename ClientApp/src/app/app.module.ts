@@ -1,8 +1,8 @@
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { MatToolbarModule, MatCardModule, MatSidenavModule, MatListModule, MatMenuModule, MatButtonModule, MatIconModule } from '@angular/material';
+import { MatToolbarModule, MatCardModule, MatSidenavModule, MatListModule, MatMenuModule, MatButtonModule, MatIconModule, MatSlideToggleModule, MatCheckboxModule } from '@angular/material';
 
 import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -14,8 +14,15 @@ import { NavMenuComponent } from './shared/components/nav-menu/nav-menu.componen
 import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.component';
 import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { InternalServerErrorComponent } from './pages/internal-server-error/internal-server-error.component';
 import { HomeComponent } from './pages/home/home.component';
+import { RegisterModule } from './pages/register/register.module';
+import { LoginModule } from './pages/login/login.module';
+import { AuthCallbackComponent } from './pages/auth-callback/auth-callback.component';
+import { ConsentModule } from './pages/consent/consent.module';
 import { GalleryComponent } from './pages/gallery/gallery.component';
+
+import { OAuthModule } from 'angular-oauth2-oidc';
 
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
@@ -32,7 +39,9 @@ export function createTranslateLoader(http: HttpClient) {
     UnauthorizedComponent,
     ForbiddenComponent,
     NotFoundComponent,
+    InternalServerErrorComponent,
     HomeComponent,
+    AuthCallbackComponent,
     GalleryComponent
   ],
   imports: [
@@ -46,6 +55,12 @@ export function createTranslateLoader(http: HttpClient) {
     MatMenuModule,
     MatButtonModule,
     MatIconModule,
+    MatSlideToggleModule,
+    MatCheckboxModule,
+    RegisterModule,
+    LoginModule,
+    ConsentModule,
+    OAuthModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
           provide: TranslateLoader,

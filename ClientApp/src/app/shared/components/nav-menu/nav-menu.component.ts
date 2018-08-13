@@ -8,6 +8,8 @@ import { LoggerService } from '../../services/logger.service';
 import { LanguagesMatcherService } from '../../services/languages-matcher.service';
 import { HashTable } from 'angular-hashtable';
 import { Language } from '../../models/language.model';
+import { Router } from '@angular/router';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
   selector: 'app-nav-menu',
@@ -26,7 +28,14 @@ export class NavMenuComponent {
 
     loggedIn = false;
 
-    constructor(private _breakpointObserver: BreakpointObserver, public translate: TranslateService, private _logger: LoggerService, _languagesMatcher: LanguagesMatcherService) {
+    constructor(
+        private _breakpointObserver: BreakpointObserver,
+        public translate: TranslateService,
+        private _logger: LoggerService,
+        _languagesMatcher: LanguagesMatcherService,
+        private router: Router,
+        private oauthService: OAuthService) {
+        this.loggedIn = oauthService.hasValidIdToken();
         const userBrowserLang = translate.getBrowserLang();
         this.availableLanguagesCode = translate.getLangs();
 
@@ -62,11 +71,23 @@ export class NavMenuComponent {
 
     public login() {
         this._logger.logDebug('Do login logic');
-        this.loggedIn = !this.loggedIn;
+        if (!this.loggedIn) {
+            this.oauthService.initImplicitFlow();
+        }
+    }
+
+    public logout() {
+        this._logger.logDebug('Do logout logic');
+        if (this.loggedIn) {
+            this.oauthService.logOut();
+        }
     }
 
     public register() {
-        this._logger.logDebug('Do logout logic');
+        this._logger.logDebug('Do register logic');
+        if (!this.loggedIn) {
+            this.router.navigate(['register']);
+        }
     }
 
     public closeMenu(menu: MatSidenav) {

@@ -2,12 +2,24 @@
 {
     using System;
 
+    using IdentityServer4;
+
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SpaServices.AngularCli;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+
+    using PictIt.Models;
+    using PictIt.Services;
+
+    using ScottBrady91.AspNetCore.Identity;
+
+    using SendGrid;
 
     public class Startup
     {
@@ -23,6 +35,92 @@
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                // Configure the context to use Azure Microsoft SQL Server.
+                options.UseSqlServer(_configuration.GetConnectionString("AzureConnection")).UseLazyLoadingProxies();
+            });
+
+            #region Identity Config
+
+            services.AddIdentity<User, IdentityRole<Guid>>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddUserManager<CustomUserManager>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequiredUniqueChars = 5;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                options.Lockout.MaxFailedAccessAttempts = 3;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings
+                options.User.RequireUniqueEmail = true;
+
+                // SignIn Options
+                options.SignIn.RequireConfirmedEmail = true;
+                options.SignIn.RequireConfirmedPhoneNumber = false;
+            });
+
+            /* Password hashing config
+            /* Available options:
+            /* Interactive for interactive sessions (fast: uses 32MB of RAM).
+            /* Moderate for normal use (moderate: uses 128MB of RAM).
+            /* Sensitive for highly sensitive data (slow: uses 512MB of RAM).
+            */
+            services.AddScoped<IPasswordHasher<User>, Argon2PasswordHasher<User>>();
+            services.Configure<Argon2PasswordHasherOptions>(options => options.Strength = Argon2HashStrength.Sensitive);
+
+            services.AddIdentityServer(
+            options =>
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+                options.UserInteraction.LoginUrl = "/login";
+            })
+            .AddAspNetIdentity<User>()
+            .AddDeveloperSigningCredential()
+            .AddInMemoryIdentityResources(Config.GetIdentityResources())
+            .AddInMemoryApiResources(Config.GetApis())
+            .AddInMemoryClients(Config.GetClients());
+
+            #endregion
+
+            #region Authentication Config
+
+            services.AddAuthentication()
+                .AddFacebook(
+                    options =>
+                    {
+                        options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+
+                        options.AppId = _configuration["Facebook:AppId"];
+                        options.AppSecret = _configuration["Facebook:AppSecret"];
+                    });
+
+            #endregion
+
+            #region Authorization Config
+
+            services.AddAuthorization();
+
+            #endregion
+
+            // Email service
+            services.AddSingleton<IEmailSender, EmailSender>();
+            services.Configure<SendGridClientOptions>(_configuration.GetSection("SendGrid"));
+
             // Enforce SSL
             services.Configure<MvcOptions>(options =>
             {
@@ -33,6 +131,7 @@
                     options.SslPort = 44399;
             });
 
+            services.AddCors();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -55,6 +154,16 @@
                 app.UseExceptionHandler("/not-found");
                 app.UseHsts();
             }
+         
+            app.UseCors(builder =>
+                {
+                    builder.AllowAnyOrigin();
+                    builder.AllowCredentials();
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyHeader();
+                });
+
+            app.UseIdentityServer();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -66,26 +175,25 @@
             {
                 spa.Options.SourcePath = "ClientApp";
 
-                // Unavailable for now
+                // Unavailable for now due to BootModuleBuilder never calling back
                 // More info at https://github.com/aspnet/Templating/issues/593
-                //spa.UseSpaPrerendering(options =>
-                //{
+                // spa.UseSpaPrerendering(options =>
+                // {
                 //    options.BootModulePath = $"{spa.Options.SourcePath}/dist/server/main.js";
                 //    options.BootModuleBuilder = env.IsDevelopment()
-                //                                    ? new AngularCliBuilder(npmScript: "build:ssr")
-                //                                    : null;
-                    
-                //    options.ExcludeUrls = new[] { "/sockjs-node" };
+                //                                  ? new AngularCliBuilder(npmScript: "build:ssr")
+                //                                  : null;
 
-                //    /* This is used to supply data to main.server.ts
+                ////    options.ExcludeUrls = new[] { "/sockjs-node" };
+
+                ////   /* This is used to supply data to main.server.ts
                 //    options.SupplyData = (context, data) =>
                 //    {
                 //        // Creates a new value called isHttpsRequest that's passed to TypeScript code
                 //        data["isHttpsRequest"] = context.Request.IsHttps;
                 //    };
                 //    */
-                //});
-
+                // });
                 if (env.IsDevelopment())
                 {
                     spa.UseAngularCliServer(npmScript: "start");

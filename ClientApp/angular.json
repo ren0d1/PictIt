@@ -22,8 +22,8 @@
               "src/pictit.png",
               "src/favicon.ico",
               "src/manifest.json",
-              "src/assets/icons/**",
-              "src/assets/i18n/**"
+              "src/assets/icons",
+              "src/assets/i18n"
             ],
             "styles": [
               "src/styles.css",

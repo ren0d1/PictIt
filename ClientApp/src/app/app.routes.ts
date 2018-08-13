@@ -3,9 +3,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.component';
 import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { InternalServerErrorComponent } from './pages/internal-server-error/internal-server-error.component';
 
 import { HomeComponent } from './pages/home/home.component';
 import { GalleryComponent } from './pages/gallery/gallery.component';
+
+import { AuthGuardService } from './shared/guards/auth.guard';
+import { AuthCallbackComponent } from './pages/auth-callback/auth-callback.component';
 
 const appRoutes: Routes = [
   { path: '',
@@ -18,7 +22,8 @@ const appRoutes: Routes = [
   },
   {
     path: 'gallery',
-    component: GalleryComponent
+    component: GalleryComponent,
+    canActivate: [AuthGuardService]
   },
   {
     path: 'unauthorized',
@@ -31,6 +36,14 @@ const appRoutes: Routes = [
   {
     path: 'not-found',
     component: NotFoundComponent
+  },
+  {
+    path: 'internal-server-error',
+    component: InternalServerErrorComponent
+  },
+  {
+    path: 'auth-callback',
+    component: AuthCallbackComponent
   },
   {
     path: '**',

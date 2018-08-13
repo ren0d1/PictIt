@@ -1,0 +1,21 @@
+<form id="LoginForm" #LoginForm name="LoginForm" [formGroup]="loginForm" autocomplete="on" action="/api/user/login" method="POST">
+  <mat-form-field>
+    <input matInput type="email" form="LoginForm" name="Email" placeholder="Email *" [formControl]="emailFormControl" autocomplete="email" maxlength="255">
+    <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+      Please enter a valid email address
+    </mat-error>
+    <mat-error *ngIf="emailFormControl.hasError('required')">
+      Email address is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput [type]="showPassword ? 'text' : 'password'" form="LoginForm" name="Password" placeholder="Password *" [formControl]="passwordFormControl" autocomplete="new-password">
+    <mat-icon matSuffix (click)="showPassword = !showPassword">{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+    <mat-error *ngIf="passwordFormControl.hasError('required')">
+      Password is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <input type="hidden" name="ReturnUrl" value="{{returnUrl}}">
+  <button mat-raised-button type="submit" color="primary" form="LoginForm" (click)="LoginForm.submit()" [disabled]="!loginForm.valid">Login</button>
+</form>
+<button (click)="tryFacebook()">Facebook</button>
