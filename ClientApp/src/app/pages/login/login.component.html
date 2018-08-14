@@ -18,7 +18,7 @@
   <input type="hidden" name="ReturnUrl" value="{{returnUrl}}">
   <button mat-raised-button type="submit" color="primary" form="LoginForm" [disabled]="!loginForm.valid">Login</button>
 </form>
-<button *ngIf="!sent" (click)="tryFacebook()">Facebook</button>
+<button mat-raised-button color="primary" [hidden]="sent" *ngFor="let provider of availableProviders" (click)="externalLogin(provider.name)">{{provider.displayName}}</button>
 <main *ngIf="sent">
   <div  class="bar">
     <div class="circle"></div>

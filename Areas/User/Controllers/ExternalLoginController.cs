@@ -38,6 +38,16 @@
         }
 
         [HttpGet]
+        [Route("providers")]
+        public async Task<List<AuthenticationScheme>> GetAvailableExternalProviders()
+        {
+            // Clear the existing external cookie to ensure a clean login process
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+            return (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Challenge(string provider, string returnUrl)
         {
             if (string.IsNullOrEmpty(returnUrl)) returnUrl = "~/";

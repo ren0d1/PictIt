@@ -3,6 +3,8 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 import * as XRegExp from 'xregexp';
 
 import { ActivatedRoute } from '@angular/router';
+import { ExternalLogin } from '../../shared/models/external-login.model';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +12,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  constructor(private activeRoute: ActivatedRoute) {}
+  constructor(private activeRoute: ActivatedRoute, private http: HttpClient) {}
 
   emailFormControl = new FormControl('', [
     Validators.required,
@@ -29,6 +31,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   sent = false;
   returnUrl = '';
+  availableProviders: ExternalLogin[];
 
   ngOnInit() {
     this.loginForm = new FormGroup ({
@@ -39,6 +42,10 @@ export class LoginComponent implements OnInit {
     this.activeRoute.queryParams.subscribe(params => {
       this.returnUrl = params['returnUrl'];
     });
+
+    this.http.get<ExternalLogin[]>('/api/user/externallogin/providers').subscribe(providers => {
+      this.availableProviders = providers;
+    });
   }
 
   doSomething(form: HTMLFormElement) {
@@ -46,33 +53,10 @@ export class LoginComponent implements OnInit {
     form.submit();
   }
 
-  // tryFacebook() {
-  //   console.log('trying facebook');
-
-  //   this.http.get('api/user/externalLogin', { params: new HttpParams().set('provider', 'Facebook').set('returnUrl', this.returnUrl) }).subscribe((result: HttpResponseBase) => {
-  //       this.sent = true;
-  //       console.log('came back');
-  //       console.log(result);
-  //     }, (error: HttpErrorResponse) => {
-  //       console.log('Status: ' + error.status + '\nStatusText: ' + error.statusText);
-  //       console.log('Ok? ' + error.ok + '\nType: ' + error.type);
-  //       console.log('Url: ' + error.url);
-  //       if (error.status === 200 && this.router.url !== error.url) {
-  //         this.router.navigateByUrl(error.url);
-  //       }
-  //       if (error.status === 404) {
-  //         if (error.url.includes('consent')) {
-  //           this.router.navigateByUrl(error.url);
-  //         }
-  //       }
-  //     }
-  //   );
-  // }
-
-  tryFacebook() {
+  externalLogin(provider: string) {
     const encodeGetParams = p => Object.entries(p).map(kv => kv.map(encodeURIComponent).join('=')).join('&');
     const params = {
-      provider: 'Facebook',
+      provider: provider,
       returnUrl: this.returnUrl
     };
 
