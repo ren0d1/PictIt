@@ -1,6 +1,6 @@
-<form [hidden]="sent" id="LoginForm" name="LoginForm" [formGroup]="loginForm" autocomplete="on" action="/api/user/login" method="POST" (submit)="doSomething(this)">
+<form [hidden]="sent" id="LoginForm" name="LoginForm" [formGroup]="loginForm" autocomplete="on" action="/api/user/login" method="POST" (submit)="sendForm(this)">
   <mat-form-field>
-    <input matInput type="email" form="LoginForm" name="Email" placeholder="Email *" [formControl]="emailFormControl" autocomplete="email" maxlength="255">
+    <input matInput type="email" form="LoginForm" name="Email" placeholder="Email" [formControl]="emailFormControl" autocomplete="email" maxlength="255">
     <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
       Please enter a valid email address
     </mat-error>
@@ -9,7 +9,7 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field>
-    <input matInput [type]="showPassword ? 'text' : 'password'" form="LoginForm" name="Password" placeholder="Password *" [formControl]="passwordFormControl" autocomplete="new-password">
+    <input matInput [type]="showPassword ? 'text' : 'password'" form="LoginForm" name="Password" placeholder="Password" [formControl]="passwordFormControl" autocomplete="current-password">
     <mat-icon matSuffix (click)="showPassword = !showPassword">{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
     <mat-error *ngIf="passwordFormControl.hasError('required')">
       Password is <strong>required</strong>
@@ -18,6 +18,7 @@
   <input type="hidden" name="ReturnUrl" value="{{returnUrl}}">
   <button mat-raised-button type="submit" color="primary" form="LoginForm" [disabled]="!loginForm.valid">Login</button>
 </form>
+<a [routerLink]="['/forgot-password']">Forgot password?</a>
 <button mat-raised-button color="primary" [hidden]="sent" *ngFor="let provider of availableProviders" (click)="externalLogin(provider.name)">{{provider.displayName}}</button>
 <main *ngIf="sent">
   <div  class="bar">

@@ -1,6 +1,7 @@
 ﻿namespace PictIt.Areas.User.Controllers
 {
     using System.Threading.Tasks;
+    using System.Web;
 
     using IdentityServer4.Events;
     using IdentityServer4.Services;
@@ -65,9 +66,7 @@
 
             if (result.RequiresTwoFactor)
             {
-                // return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                // OR
-                // return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                 return Redirect($"/login-2fa?returnUrl={ HttpUtility.UrlEncode(userToLogin.ReturnUrl) }");
             }
 
             if (result.IsLockedOut)

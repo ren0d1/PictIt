@@ -9,6 +9,7 @@
     using IdentityModel;
     using IdentityServer4;
     using IdentityServer4.Events;
+    using IdentityServer4.Extensions;
     using IdentityServer4.Services;
 
     using Microsoft.AspNetCore.Authentication;
@@ -82,24 +83,109 @@
             }
 
             // Sign in the user with this external login provider if the user already has a login.
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
             if (result.Succeeded)
             {
+                User user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+
                 _logger.LogInformation($"{info.Principal.Identity.Name} logged in with {info.LoginProvider} provider.");
-                return LocalRedirect(returnUrl);
+                await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.FirstName + " " + user.LastName));
+                if (_interaction.IsValidReturnUrl(returnUrl) || Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+
+                return Redirect("~/");
+            }
+
+            if (result.RequiresTwoFactor)
+            {
+                // return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                // OR
+                // return RedirectToAction(nameof(SendCode), new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
             }
 
             if (result.IsLockedOut)
             {
                 return new BadRequestObjectResult("locked out");
             }
+
+            // If the user does not have an account, then ask the user to create an account.
+            if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
+            {
+                User user = await _userManager.FindByEmailAsync(info.Principal.FindFirstValue(ClaimTypes.Email));
+
+                // Checks if user with this email already exists
+                if (user != null)
+                {
+                    var addLoginResult = await _userManager.AddLoginAsync(user, info);
+                    if (addLoginResult.Succeeded)
+                    {
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.FirstName + " " + user.LastName));
+                        if (_interaction.IsValidReturnUrl(returnUrl) || Url.IsLocalUrl(returnUrl))
+                        {
+                            return Redirect(returnUrl);
+                        }
+                    }
+
+                    return Redirect("external-login-error");
+                }
+
+
+                User userWithSameName = await _userManager.FindByNameAsync(info.Principal.GetDisplayName());
+                User newUser;
+
+                if (userWithSameName == null)
+                {
+                    newUser = new User { UserName = info.Principal.GetDisplayName(), Email = info.Principal.FindFirstValue(ClaimTypes.Email), EmailConfirmed = true };
+                }
+                else
+                {
+                    string differentName = info.Principal.FindFirstValue(ClaimTypes.Email).Substring(0, info.Principal.FindFirstValue(ClaimTypes.Email).IndexOf("@", StringComparison.Ordinal));
+                    userWithSameName = await _userManager.FindByNameAsync(differentName);
+
+                    while (userWithSameName != null)
+                    {
+                        const string Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                        char[] stringChars = new char[8];
+                        var random = new Random();
+
+                        for (int i = 0; i < stringChars.Length; i++)
+                        {
+                            stringChars[i] = Chars[random.Next(Chars.Length)];
+                        }
+
+                        differentName = new string(stringChars);
+                        userWithSameName = await _userManager.FindByNameAsync(differentName.Normalize());
+                    }
+
+                    newUser = new User { UserName = differentName, Email = info.Principal.FindFirstValue(ClaimTypes.Email), EmailConfirmed = true };
+                }
+
+                var accountCreationResult = await _userManager.CreateAsync(newUser);
+
+                if (accountCreationResult.Succeeded)
+                {
+                    var addLoginResult = await _userManager.AddLoginAsync(newUser, info);
+                    if (addLoginResult.Succeeded)
+                    {
+                        await _signInManager.SignInAsync(newUser, isPersistent: false);
+                        await _events.RaiseAsync(new UserLoginSuccessEvent(newUser.UserName, newUser.Id.ToString(), newUser.FirstName + " " + newUser.LastName));
+                        if (_interaction.IsValidReturnUrl(returnUrl) || Url.IsLocalUrl(returnUrl))
+                        {
+                            return Redirect(returnUrl);
+                        }
+                    }
+                }
+            }
             else
             {
-                var user = await _userManager.FindByEmailAsync("mytestemail@email.com");
-                var test = await _userManager.AddLoginAsync(user, info);
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                return LocalRedirect(returnUrl);
+                // Change URL
+                return Redirect("external-login-error");
             }
+
+            return Redirect("external-login-error");
         }
     }
 }

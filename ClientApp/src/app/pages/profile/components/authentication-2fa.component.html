@@ -1,0 +1,16 @@
+<mat-card *ngIf="authentication2faInformation.isEnabled" color="warn">
+    <strong>You have {{authentication2faInformation.recoveryCodesCount}} recovery code{{authentication2faInformation.recoveryCodesCount > 1 ? 's' : ''}} left.</strong>
+    <p *ngIf="authentication2faInformation.recoveryCodesCount === 0">
+        You must <a (click)="generateRecoveryCodes()">generate a new set of recovery codes</a> before you can log in with a recovery code.
+    </p>
+    <p *ngIf="authentication2faInformation.recoveryCodesCount > 0">
+        You can <a (click)="generateRecoveryCodes()">generate a new set of recovery codes</a>.
+    </p>
+    <button mat-raised-button *ngIf="authentication2faInformation.IsMachineRemembered" color="primary" (click)="forgetBrowser()">Forget this browser</button>
+    <button mat-raised-button color="primary" (click)="disable2fa()">Disable 2FA</button>
+</mat-card>
+<mat-card color="primary">
+    <a *ngIf="!authentication2faInformation.hasAuthenticator" [routerLink]="['/authenticator']">Add authenticator app</a>
+    <a *ngIf="authentication2faInformation.hasAuthenticator" [routerLink]="['/authenticator']">Setup authenticator app</a>
+    <a *ngIf="authentication2faInformation.hasAuthenticator" (click)="resetAuthenticator()">Reset authenticator app</a>
+</mat-card>

@@ -1,0 +1,20 @@
+<form [hidden]="sent" id="Login2faForm" name="Login2faForm" [formGroup]="login2faForm" autocomplete="on" action="/api/user/login2fa" method="POST" (submit)="sendForm(this)">
+  <mat-form-field>
+    <input matInput type="text" form="Login2faForm" name="TwoFactorCode" placeholder="Authenticator code" [formControl]="twoFactorCodeFormControl" autocomplete="off" minlength="6" maxlength="8">
+    <mat-error *ngIf="(twoFactorCodeFormControl.hasError('minlength') || twoFactorCodeFormControl.hasError('maxlength')) && !twoFactorCodeFormControl.hasError('required')">
+      Code must be at least 6 and at max 8 characters long.
+    </mat-error>
+    <mat-error *ngIf="twoFactorCodeFormControl.hasError('required')">
+      Code is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <mat-checkbox form="Login2faForm" name="RememberMachine">Remember this machine</mat-checkbox>
+  <input type="hidden" name="ReturnUrl" value="{{returnUrl}}">
+  <button mat-raised-button type="submit" color="primary" form="Login2faForm" [disabled]="!login2faForm.valid">Authenticate</button>
+</form>
+<main *ngIf="sent">
+  <div  class="bar">
+    <div class="circle"></div>
+    <p>Logging in in progress</p>
+  </div>
+</main>

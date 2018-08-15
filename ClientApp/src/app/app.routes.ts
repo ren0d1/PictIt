@@ -4,6 +4,7 @@ import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.compone
 import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { InternalServerErrorComponent } from './pages/internal-server-error/internal-server-error.component';
+import { ExternalLoginErrorComponent } from './pages/external-login-error/external-login-error.component';
 
 import { HomeComponent } from './pages/home/home.component';
 import { GalleryComponent } from './pages/gallery/gallery.component';
@@ -40,6 +41,10 @@ const appRoutes: Routes = [
   {
     path: 'internal-server-error',
     component: InternalServerErrorComponent
+  },
+  {
+    path: 'external-login-error',
+    component: ExternalLoginErrorComponent
   },
   {
     path: 'auth-callback',

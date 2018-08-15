@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  doSomething(form: HTMLFormElement) {
+  sendForm(form: HTMLFormElement) {
     this.sent = true;
     form.submit();
   }

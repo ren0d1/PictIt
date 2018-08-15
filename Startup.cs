@@ -1,7 +1,9 @@
 ﻿namespace PictIt
 {
     using System;
+    using System.Collections.Generic;
 
+    using Microsoft.AspNetCore.Authentication.OAuth;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -97,42 +99,32 @@
 
             #region Authentication Config
 
-            services.AddAuthentication()
-                //.AddDeviantArt(
-                //    options =>
-                //    {
-
-                //    })
-                .AddFacebook(
-                    options =>
+            services.AddAuthentication().AddFacebook(
+                options =>
                     {
                         options.AppId = _configuration["Facebook:AppId"];
                         options.AppSecret = _configuration["Facebook:AppSecret"];
-                    })
-                .AddGitHub(
-                    options =>
+                    }).AddGitHub(
+                options =>
                     {
                         options.ClientId = _configuration["GitHub:ClientId"];
                         options.ClientSecret = _configuration["GitHub:ClientSecret"];
-                    })
-                .AddGoogle(
-                    options =>
+                    }).AddGoogle(
+                options =>
                     {
                         options.ClientId = _configuration["Google:ClientId"];
                         options.ClientSecret = _configuration["Google:ClientSecret"];
-                    })
-                .AddLinkedIn(
-                    options =>
+                    }).AddLinkedIn(
+                options =>
                     {
                         options.ClientId = _configuration["LinkedIn:ClientId"];
                         options.ClientSecret = _configuration["LinkedIn:ClientSecret"];
-                    })
-                .AddMicrosoftAccount(
-                    options =>
+                    }).AddMicrosoftAccount(
+                options =>
                     {
                         options.ClientId = _configuration["Microsoft:AppId"];
                         options.ClientSecret = _configuration["Microsoft:AppSecret"];
-                    })
+                    });
                 /* Temporary unavailable
                 .AddSoundCloud(
                     options =>
@@ -140,12 +132,14 @@
 
                         })
                 */
+                /* API migration causes troubles
                 .AddTwitter(
                     options =>
                     {
                         options.ConsumerKey = _configuration["Twitter:ApiKey"];
                         options.ConsumerSecret = _configuration["Twitter:ApiSecret"];
                     });
+                */
 
             #endregion
 

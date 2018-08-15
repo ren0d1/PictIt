@@ -12,12 +12,13 @@
     public class ConfirmEmailController : AnonymousApiController
     {
         private readonly UserManager<User> _userManager;
-
+        private readonly SignInManager<User> _signInManager;
         private readonly ILogger<ConfirmEmailController> _logger;
 
-        public ConfirmEmailController(UserManager<User> userManager, ILogger<ConfirmEmailController> logger)
+        public ConfirmEmailController(UserManager<User> userManager, SignInManager<User> signInManager, ILogger<ConfirmEmailController> logger)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
             _logger = logger;
         }
 
@@ -44,6 +45,7 @@
                 return new BadRequestObjectResult(result.Errors);
             }
 
+            await _signInManager.SignInAsync(user, isPersistent: false);
             _logger.LogTrace($"{userId} successfully confirmed his email.");
             return new OkObjectResult("Successfully confirmed email address.");
         }
