@@ -1,9 +1,7 @@
 ﻿namespace PictIt
 {
     using System;
-    using System.Collections.Generic;
 
-    using Microsoft.AspNetCore.Authentication.OAuth;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -38,7 +36,7 @@
             services.AddDbContext<AppDbContext>(options =>
             {
                 // Configure the context to use Azure Microsoft SQL Server.
-                options.UseSqlServer(_configuration.GetConnectionString("AzureConnection")).UseLazyLoadingProxies();
+                options.UseSqlServer(_configuration.GetConnectionString("AzureConnection")).UseLazyLoadingProxies(false);
             });
 
             #region Identity Config
@@ -81,19 +79,19 @@
             services.Configure<Argon2PasswordHasherOptions>(options => options.Strength = Argon2HashStrength.Sensitive);
 
             services.AddIdentityServer(
-            options =>
-            {
-                options.Events.RaiseErrorEvents = true;
-                options.Events.RaiseInformationEvents = true;
-                options.Events.RaiseFailureEvents = true;
-                options.Events.RaiseSuccessEvents = true;
-                options.UserInteraction.LoginUrl = "/login";
-            })
-            .AddAspNetIdentity<User>()
-            .AddDeveloperSigningCredential()
-            .AddInMemoryIdentityResources(Config.GetIdentityResources())
-            .AddInMemoryApiResources(Config.GetApis())
-            .AddInMemoryClients(Config.GetClients());
+                    options =>
+                        {
+                            options.Events.RaiseErrorEvents = true;
+                            options.Events.RaiseInformationEvents = true;
+                            options.Events.RaiseFailureEvents = true;
+                            options.Events.RaiseSuccessEvents = true;
+                            options.UserInteraction.LoginUrl = "/login";
+                        })
+                .AddAspNetIdentity<User>()
+                .AddDeveloperSigningCredential()
+                .AddConfigurationStore<AppDbContext>()
+                .AddConfigurationStoreCache()
+                .AddOperationalStore<AppDbContext>();
 
             #endregion
 

@@ -17,6 +17,7 @@
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="2.0.0" />
     <PackageReference Include="AspNet.Security.OAuth.LinkedIn" Version="2.0.0" />
     <PackageReference Include="AspNet.Security.OAuth.SoundCloud" Version="2.0.0" />
+    <PackageReference Include="IdentityServer4" Version="2.3.0-preview1-update1" />
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="2.3.0-preview1-update1" />
     <PackageReference Include="IdentityServer4.EntityFramework" Version="2.3.0-preview1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -25,6 +26,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.AutoHistory" Version="2.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="2.1.1" />
     <PackageReference Include="ScottBrady91.AspNetCore.Identity.Argon2PasswordHasher" Version="1.0.0" />
