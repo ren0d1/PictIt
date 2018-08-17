@@ -45,7 +45,7 @@
                     {
                         ConsentRequest consentRequest = new ConsentRequest(authorizationRequest, client.ClientName);
                         IEnumerable<IdentityResource> requestedIdentityScopes = resources.IdentityResources.Where(x => consentRequest.ScopesRequested.Contains(x.Name));
-                        return Ok(new { consentRequest, requestedIdentityScopes });
+                        return new OkObjectResult(new { consentRequest, requestedIdentityScopes });
                     }
 
                     _logger.LogError($"No scopes matching: {authorizationRequest.ScopesRequested.Aggregate((x, y) => x + ", " + y)}");

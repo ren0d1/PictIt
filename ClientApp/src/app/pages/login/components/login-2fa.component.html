@@ -9,9 +9,10 @@
     </mat-error>
   </mat-form-field>
   <mat-checkbox form="Login2faForm" name="RememberMachine">Remember this machine</mat-checkbox>
-  <input type="hidden" name="ReturnUrl" value="{{returnUrl}}">
+  <input type="hidden" form="Login2faForm" name="ReturnUrl" value="{{returnUrl}}">
   <button mat-raised-button type="submit" color="primary" form="Login2faForm" [disabled]="!login2faForm.valid">Authenticate</button>
 </form>
+<a [hidden]="sent" [routerLink]="['/recovery-code']" [queryParams]="{returnUrl: returnUrl}">Use recovery code</a>
 <main *ngIf="sent">
   <div  class="bar">
     <div class="circle"></div>

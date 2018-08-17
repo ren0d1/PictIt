@@ -4,6 +4,7 @@ import { LoginComponent } from './login.component';
 import { ForgotPasswordComponent } from './components/forgot-password.component';
 import { ResetPasswordComponent } from './components/reset-password.component';
 import { Login2faComponent } from './components/login-2fa.component';
+import { RecoveryCodeComponent } from './components/recovery-code.component';
 
 const appRoutes: Routes = [
     {
@@ -21,6 +22,10 @@ const appRoutes: Routes = [
     {
         path: 'login-2fa',
         component: Login2faComponent
+    },
+    {
+        path: 'recovery-code',
+        component: RecoveryCodeComponent
     }
 ];
 

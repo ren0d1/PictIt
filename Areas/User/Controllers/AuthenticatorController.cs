@@ -1,6 +1,5 @@
 ﻿namespace PictIt.Areas.User.Controllers
 {
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -8,6 +7,7 @@
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Routing;
     using Microsoft.Extensions.Logging;
 
     using PictIt.Areas.User.Models;
@@ -69,12 +69,11 @@
             {
                 IEnumerable<string> recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
                 string[] recoveryCodesArray = recoveryCodes.ToArray();
-                return RedirectToPage("./ShowRecoveryCodes");
+                string redirectUrl = $"/show-codes?{recoveryCodesArray.Aggregate(string.Empty, (result, item) => result + (result.Length > 0 ? "&" : string.Empty) + "recoveryCodes=" + item)}";
+                return Redirect(redirectUrl);
             }
-            else
-            {
-                return RedirectToPage("./TwoFactorAuthentication");
-            }
+
+            return Redirect("/profile");
         }
 
         private async Task<AuthenticatorUser> LoadSharedKeyAndQrCodeUriAsync(User user)

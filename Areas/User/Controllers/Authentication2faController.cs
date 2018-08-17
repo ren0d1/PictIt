@@ -58,12 +58,12 @@
             }
 
             await _signInManager.ForgetTwoFactorClientAsync();
-            return Ok("The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code.");
+            return new OkObjectResult("The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code.");
         }
 
         [HttpPost]
         [Route("GenerateRecoveryCodes")]
-        public async Task<ActionResult<string[]>> GenerateRecoveryCodes()
+        public async Task<IActionResult> GenerateRecoveryCodes()
         {
             User user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -80,7 +80,10 @@
 
             IEnumerable<string> recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
             _logger.LogInformation("User with ID '{UserId}' has generated new 2FA recovery codes.", userId);
-            return recoveryCodes.ToArray();
+
+            string[] recoveryCodesArray = recoveryCodes.ToArray();
+            string redirectUrl = $"/show-codes?{recoveryCodesArray.Aggregate(string.Empty, (result, item) => result + (result.Length > 0 ? "&" : string.Empty) + "recoveryCodes=" + item)}";
+            return Redirect(redirectUrl);
         }
 
         [HttpPost]
@@ -100,7 +103,7 @@
             }
 
             _logger.LogInformation("User with ID '{UserId}' has disabled 2fa.", _userManager.GetUserId(User));
-            return Ok("2fa has been disabled. You can reenable 2fa when you setup an authenticator app");
+            return new OkObjectResult("2fa has been disabled. You can reenable 2fa when you setup an authenticator app");
         }
 
         [HttpPost]
@@ -118,7 +121,8 @@
             _logger.LogInformation("User with ID '{UserId}' has reset their authentication app key.", user.Id);
 
             await _signInManager.RefreshSignInAsync(user);
-            return Ok("Your authenticator app key has been reset, you will need to configure your authenticator app using the new key.");
+
+            return new OkObjectResult("Your authenticator app key has been reset, you will need to configure your authenticator app using the new key.");
         }
     }
 }

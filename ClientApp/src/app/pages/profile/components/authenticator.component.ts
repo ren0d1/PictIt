@@ -23,7 +23,7 @@ export class AuthenticatorComponent implements OnInit {
 
   ngOnInit() {
     this.authenticatorForm = new FormGroup ({
-      emailFormControl: this.twoFactorCodeFormControl
+      twoFactorCodeFormControl: this.twoFactorCodeFormControl
     });
 
     this.http.get<AuthenticatorUser>('/api/user/Authenticator').subscribe(authenticator => {

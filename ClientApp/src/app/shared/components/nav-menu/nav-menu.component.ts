@@ -34,8 +34,7 @@ export class NavMenuComponent {
         private _logger: LoggerService,
         _languagesMatcher: LanguagesMatcherService,
         private router: Router,
-        private oauthService: OAuthService) {
-        this.loggedIn = oauthService.hasValidIdToken();
+        public oauthService: OAuthService) {
         const userBrowserLang = translate.getBrowserLang();
         this.availableLanguagesCode = translate.getLangs();
 

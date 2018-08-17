@@ -33,7 +33,7 @@
             var result = await _userManager.ResetPasswordAsync(user, resetPasswordUser.Code, resetPasswordUser.Password);
             if (result.Succeeded)
             {
-                return Ok();
+                return new OkObjectResult("Password successfully reset.");
             }
 
             return BadRequest();

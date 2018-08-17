@@ -7,6 +7,7 @@ import { LoginComponent } from './login.component';
 import { ForgotPasswordComponent } from './components/forgot-password.component';
 import { ResetPasswordComponent } from './components/reset-password.component';
 import { Login2faComponent } from './components/login-2fa.component';
+import { RecoveryCodeComponent } from './components/recovery-code.component';
 import { LoginRouting } from './login.routes';
 
 @NgModule({
@@ -14,7 +15,8 @@ import { LoginRouting } from './login.routes';
     LoginComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-    Login2faComponent
+    Login2faComponent,
+    RecoveryCodeComponent
   ],
   imports: [
     BrowserAnimationsModule,
