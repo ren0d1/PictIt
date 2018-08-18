@@ -5,6 +5,7 @@ import { ForgotPasswordComponent } from './components/forgot-password.component'
 import { ResetPasswordComponent } from './components/reset-password.component';
 import { Login2faComponent } from './components/login-2fa.component';
 import { RecoveryCodeComponent } from './components/recovery-code.component';
+import { LockoutComponent } from './components/lockout.component';
 
 const appRoutes: Routes = [
     {
@@ -26,6 +27,10 @@ const appRoutes: Routes = [
     {
         path: 'recovery-code',
         component: RecoveryCodeComponent
+    },
+    {
+        path: 'lockout',
+        component: LockoutComponent
     }
 ];
 

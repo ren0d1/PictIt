@@ -59,12 +59,12 @@ export class ResetPasswordComponent implements OnInit {
 
       this.http.post('api/user/resetpassword', reset).subscribe(result => {
         this.success = true;
-        setTimeout((router: Router) => {
+        setTimeout(() => {
           this.router.navigate(['login']);
         }, 5000);  // 5s
       }, error => {
         this.success = false;
-        setTimeout((router: Router) => {
+        setTimeout(() => {
           this.router.navigate(['home']);
         }, 5000);  // 5s
       });

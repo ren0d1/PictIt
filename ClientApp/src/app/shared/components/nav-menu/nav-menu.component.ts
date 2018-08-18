@@ -26,8 +26,6 @@ export class NavMenuComponent {
     availableLanguagesCode: string[];
     availableLanguagesInformations = new HashTable<string, Language>();
 
-    loggedIn = false;
-
     constructor(
         private _breakpointObserver: BreakpointObserver,
         public translate: TranslateService,
@@ -70,21 +68,21 @@ export class NavMenuComponent {
 
     public login() {
         this._logger.logDebug('Do login logic');
-        if (!this.loggedIn) {
+        if (!this.oauthService.hasValidIdToken()) {
             this.oauthService.initImplicitFlow();
         }
     }
 
     public logout() {
         this._logger.logDebug('Do logout logic');
-        if (this.loggedIn) {
+        if (this.oauthService.hasValidIdToken()) {
             this.oauthService.logOut();
         }
     }
 
     public register() {
         this._logger.logDebug('Do register logic');
-        if (!this.loggedIn) {
+        if (!this.oauthService.hasValidIdToken()) {
             this.router.navigate(['register']);
         }
     }

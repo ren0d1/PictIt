@@ -6,6 +6,8 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { InternalServerErrorComponent } from './pages/internal-server-error/internal-server-error.component';
 import { ExternalLoginErrorComponent } from './pages/external-login-error/external-login-error.component';
 
+import { LogoutComponent } from './pages/logout/logout.component';
+
 import { HomeComponent } from './pages/home/home.component';
 import { GalleryComponent } from './pages/gallery/gallery.component';
 
@@ -45,6 +47,10 @@ const appRoutes: Routes = [
   {
     path: 'external-login-error',
     component: ExternalLoginErrorComponent
+  },
+  {
+    path: 'logout',
+    component: LogoutComponent
   },
   {
     path: 'auth-callback',

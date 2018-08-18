@@ -19,6 +19,7 @@ import { ExternalLoginErrorComponent } from './pages/external-login-error/extern
 import { HomeComponent } from './pages/home/home.component';
 import { RegisterModule } from './pages/register/register.module';
 import { LoginModule } from './pages/login/login.module';
+import { LogoutComponent } from './pages/logout/logout.component';
 import { AuthCallbackComponent } from './pages/auth-callback/auth-callback.component';
 import { ConsentModule } from './pages/consent/consent.module';
 import { ProfileModule } from './pages/profile/profile.module';
@@ -44,6 +45,7 @@ export function createTranslateLoader(http: HttpClient) {
     InternalServerErrorComponent,
     ExternalLoginErrorComponent,
     HomeComponent,
+    LogoutComponent,
     AuthCallbackComponent,
     GalleryComponent
   ],

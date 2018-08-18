@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
     });
 
     this.activeRoute.queryParams.subscribe(params => {
-      this.returnUrl = params['returnUrl'];
+      this.returnUrl = params['ReturnUrl'];
     });
 
     this.http.get<ExternalLogin[]>('/api/user/externallogin/providers').subscribe(providers => {
@@ -60,6 +60,7 @@ export class LoginComponent implements OnInit {
       returnUrl: this.returnUrl
     };
 
+    // Using window.location instead of router plays loading screen animation
     window.location.href = 'https://localhost:44399/api/user/externallogin?' + encodeGetParams(params);
   }
 }

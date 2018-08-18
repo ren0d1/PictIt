@@ -39,7 +39,7 @@
             var context = await _interaction.GetAuthorizationContextAsync(userToLogin.ReturnUrl);
             if (context == null) return Redirect("~/");
 
-            User user = await _userManager.FindByEmailAsync(userToLogin.Email);
+            var user = await _userManager.FindByEmailAsync(userToLogin.Email);
             if (user == null)
             {
                 _logger.LogError($"There is no existing user using {userToLogin.Email} as an email address.");
@@ -50,7 +50,8 @@
             }
 
             // lockoutOnFailure = increment lockout count in case of failure
-            SignInResult result = await _signInManager.PasswordSignInAsync(user, userToLogin.Password, false, lockoutOnFailure: true);
+            var result = await _signInManager.PasswordSignInAsync(user, userToLogin.Password, false, lockoutOnFailure: true);
+
             if (result.Succeeded)
             {
                 _logger.LogInformation($"{userToLogin.Email} successfully loged in.");
@@ -75,7 +76,7 @@
 
                 await _events.RaiseAsync(new UserLoginFailureEvent(userToLogin.Email, "account locked out"));
 
-                return new BadRequestObjectResult("locked out");
+                return new RedirectResult($"/lockout?email={userToLogin.Email}");
             }
             
             _logger.LogError($"{userToLogin.Email} didn't provide its correct password.");
