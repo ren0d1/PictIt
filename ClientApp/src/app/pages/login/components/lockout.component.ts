@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { OAuthService } from 'angular-oauth2-oidc';
+import { HttpErrorHandlerService } from '../../../shared/services/http-error-handler.service';
 
 @Component({
   selector: 'app-lockout',
@@ -10,7 +11,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
   styleUrls: ['./lockout.component.css']
 })
 export class LockoutComponent implements OnInit {
-  constructor(private activeRoute: ActivatedRoute, private http: HttpClient, public oauthService: OAuthService) {}
+  constructor(private activeRoute: ActivatedRoute, private http: HttpClient, public oauthService: OAuthService, private errorHandler : HttpErrorHandlerService) {}
 
   email = '';
   actualTime: number;
@@ -51,6 +52,6 @@ export class LockoutComponent implements OnInit {
       setTimeout(() => {
         this.oauthService.initImplicitFlow();
       }, this.timeDif);
-    });
+    }, (error: HttpErrorResponse) => this.errorHandler.handleError(error));
   }
 }

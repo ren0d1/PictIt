@@ -16,7 +16,7 @@
     using PictIt.Areas.User.Models;
 
     [Area("User")]
-    public class ConsentController : AnonymousApiController
+    public class ConsentController : AuthorizedApiController
     {
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;

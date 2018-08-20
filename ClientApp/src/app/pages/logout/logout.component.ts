@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorHandlerService } from '../../shared/services/http-error-handler.service';
 
 @Component({
   selector: 'app-logout',
@@ -9,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./logout.component.css']
 })
 export class LogoutComponent implements OnInit {
-  constructor(private activeRoute: ActivatedRoute, private http: HttpClient, private router: Router) {}
+  constructor(private activeRoute: ActivatedRoute, private http: HttpClient, private router: Router, private errorHandler: HttpErrorHandlerService) {}
 
   returnUrl = '';
 
@@ -25,6 +26,6 @@ export class LogoutComponent implements OnInit {
       }else{
         this.router.navigateByUrl('home');
       }
-    })
+    }, (error: HttpErrorResponse) => this.errorHandler.handleError(error))
   }
 }

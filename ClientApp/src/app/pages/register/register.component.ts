@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import * as XRegExp from 'xregexp';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { RegisterUser } from '../../shared/models/register-user.model';
 import { EmailLookup } from '../../shared/models/email-lookup.model';
+import { HttpErrorHandlerService } from '../../shared/services/http-error-handler.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -11,7 +13,7 @@ import { EmailLookup } from '../../shared/models/email-lookup.model';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private errorHandler: HttpErrorHandlerService, private router: Router) { }
 
   registrationForm: FormGroup;
 
@@ -73,8 +75,13 @@ export class RegisterComponent implements OnInit {
           this.termsAndConditionsFormControl.value
         );
 
+        this.sent = true;
+
         this.http.post('api/user/register', userToRegister).subscribe(result => {
-          this.sent = true;
+          this.router.navigate(['confirm-email']);
+        }, (error: HttpErrorResponse) => {
+          this.errorHandler.handleError(error);
+          this.sent = false;
         });
       }
     });
@@ -95,8 +102,7 @@ export class RegisterComponent implements OnInit {
       if (!result.email_sendable) {
         control.setErrors({ emailUnreachable: true});
       }
-
       callback();
-    });
+    }, (error: HttpErrorResponse) => this.errorHandler.handleError(error));
   }
 }

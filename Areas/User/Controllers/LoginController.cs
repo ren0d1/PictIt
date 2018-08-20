@@ -34,10 +34,10 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login([FromForm] LoginUser userToLogin)
+        public async Task<IActionResult> Login([FromBody] LoginUser userToLogin)
         {
             var context = await _interaction.GetAuthorizationContextAsync(userToLogin.ReturnUrl);
-            if (context == null) return Redirect("~/");
+            if (context == null) return StatusCode(209, "/home");
 
             var user = await _userManager.FindByEmailAsync(userToLogin.Email);
             if (user == null)
@@ -45,8 +45,7 @@
                 _logger.LogError($"There is no existing user using {userToLogin.Email} as an email address.");
 
                 await _events.RaiseAsync(new UserLoginFailureEvent(userToLogin.Email, "wrong email/password combination"));
-
-                return new BadRequestObjectResult("wrong email/password");
+                return UnprocessableEntity("wrong email/password");
             }
 
             // lockoutOnFailure = increment lockout count in case of failure
@@ -59,15 +58,15 @@
                 await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.FirstName + " " + user.LastName));
                 if (_interaction.IsValidReturnUrl(userToLogin.ReturnUrl) || Url.IsLocalUrl(userToLogin.ReturnUrl))
                 {
-                    return Redirect(userToLogin.ReturnUrl);
+                    return StatusCode(209, userToLogin.ReturnUrl);
                 }
 
-                return Redirect("~/");
+                return StatusCode(209, "/home");
             }
 
             if (result.RequiresTwoFactor)
             {
-                 return Redirect($"/login-2fa?returnUrl={ HttpUtility.UrlEncode(userToLogin.ReturnUrl) }");
+                return StatusCode(209, $"/login-2fa?returnUrl={ HttpUtility.UrlEncode(userToLogin.ReturnUrl) }");
             }
 
             if (result.IsLockedOut)
@@ -76,14 +75,14 @@
 
                 await _events.RaiseAsync(new UserLoginFailureEvent(userToLogin.Email, "account locked out"));
 
-                return new RedirectResult($"/lockout?email={userToLogin.Email}");
+                return StatusCode(209, $"/lockout?email={userToLogin.Email}");
             }
             
             _logger.LogError($"{userToLogin.Email} didn't provide its correct password.");
 
             await _events.RaiseAsync(new UserLoginFailureEvent(userToLogin.Email, "wrong email/password combination"));
 
-            return new BadRequestObjectResult("wrong email/password");
+            return UnprocessableEntity("wrong email/password");
         }
     }
 }

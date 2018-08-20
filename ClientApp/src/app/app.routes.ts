@@ -50,11 +50,13 @@ const appRoutes: Routes = [
   },
   {
     path: 'logout',
-    component: LogoutComponent
+    component: LogoutComponent,
+    canActivate: [AuthGuardService]
   },
   {
     path: 'auth-callback',
-    component: AuthCallbackComponent
+    component: AuthCallbackComponent,
+    canActivate: [AuthGuardService]
   },
   {
     path: '**',

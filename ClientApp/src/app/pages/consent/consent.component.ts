@@ -1,10 +1,11 @@
 import { Component, OnInit} from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { ConsentRequest } from '../../shared/models/consent-request.model';
 import { IdentityResource } from '../../shared/models/identity-resource.model';
 
 import { ActivatedRoute } from '@angular/router';
+import { HttpErrorHandlerService } from '../../shared/services/http-error-handler.service';
 
 @Component({
   selector: 'app-consent',
@@ -12,7 +13,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./consent.component.css']
 })
 export class ConsentComponent implements OnInit {
-  constructor(private http: HttpClient, private activeRoute: ActivatedRoute) {}
+  constructor(private http: HttpClient, private activeRoute: ActivatedRoute, private errorHandler: HttpErrorHandlerService) {}
 
   consentRequest: ConsentRequest;
   requestedIdentityScopes: IdentityResource[];
@@ -34,9 +35,6 @@ export class ConsentComponent implements OnInit {
         this.requestedIdentityScopes.forEach(scope => {
           this.consentForm.addControl(scope.name, new FormControl('', scope.required ? [Validators.requiredTrue] : []));
         });
-      },
-      error => {
-        console.log(error);
-      });
+      }, (error: HttpErrorResponse) => this.errorHandler.handleError(error));
   }
 }

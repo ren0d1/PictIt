@@ -3,6 +3,7 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 
 import { AuthenticatorUser } from '../../../shared/models/authenticator-user.model';
+import { HttpErrorHandlerService } from '../../../shared/services/http-error-handler.service';
 
 @Component({
   selector: 'app-authenticator',
@@ -10,7 +11,7 @@ import { AuthenticatorUser } from '../../../shared/models/authenticator-user.mod
   styleUrls: ['./authenticator.component.css']
 })
 export class AuthenticatorComponent implements OnInit {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private errorHandler: HttpErrorHandlerService) {}
 
   twoFactorCodeFormControl = new FormControl('', [
     Validators.required,
@@ -28,18 +29,12 @@ export class AuthenticatorComponent implements OnInit {
 
     this.http.get<AuthenticatorUser>('/api/user/Authenticator').subscribe(authenticator => {
       this.authenticator = authenticator;
-    });
+    }, (error: HttpErrorResponse) => this.errorHandler.handleError(error));
   }
 
   sendForm() {
     if (this.authenticatorForm.valid) {
-      this.http.post('/api/user/authenticator', null,  { params: new HttpParams().set('twoFactorCode', this.twoFactorCodeFormControl.value) }).subscribe(result => {
-
-      }, (error: HttpErrorResponse) => {
-        if (error.status === 422) {
-          this.twoFactorCodeFormControl.setErrors({wrongcode: true});
-        }
-      });
+      this.http.post('/api/user/authenticator', null,  { params: new HttpParams().set('twoFactorCode', this.twoFactorCodeFormControl.value) }).subscribe(() => {}, (error: HttpErrorResponse) => this.errorHandler.handleFormError(error, this.twoFactorCodeFormControl));
     }
   }
 }

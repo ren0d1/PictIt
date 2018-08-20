@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { OAuthService } from 'angular-oauth2-oidc';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth-callback',
@@ -10,15 +10,13 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class AuthCallbackComponent implements OnInit {
 
-  constructor(private oauthService: OAuthService, private activeRoute: ActivatedRoute) { }
+  constructor(private oauthService: OAuthService, private router: Router) { }
 
   claims;
 
   ngOnInit() {
-    this.activeRoute.queryParams.subscribe(params => {
-      console.log(params);
-    });
-
     this.claims = this.oauthService.getIdentityClaims();
+
+    this.router.navigate(['gallery']);
   }
 }

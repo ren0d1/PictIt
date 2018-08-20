@@ -4,7 +4,9 @@ import * as XRegExp from 'xregexp';
 
 import { ActivatedRoute } from '@angular/router';
 import { ExternalLogin } from '../../shared/models/external-login.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorHandlerService } from '../../shared/services/http-error-handler.service';
+import { LoginUser } from '../../shared/models/login-user.model';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +14,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  constructor(private activeRoute: ActivatedRoute, private http: HttpClient) {}
+  constructor(private activeRoute: ActivatedRoute, private http: HttpClient, private errorHandler: HttpErrorHandlerService) {}
 
   emailFormControl = new FormControl('', [
     Validators.required,
@@ -45,12 +47,22 @@ export class LoginComponent implements OnInit {
 
     this.http.get<ExternalLogin[]>('/api/user/externallogin/providers').subscribe(providers => {
       this.availableProviders = providers;
-    });
+    }, (error: HttpErrorResponse) => this.errorHandler.handleError(error));
   }
 
-  sendForm(form: HTMLFormElement) {
-    this.sent = true;
-    form.submit();
+  sendForm() {
+    if(this.loginForm.valid){
+      const loginUser = new LoginUser(
+        this.emailFormControl.value,
+        this.passwordFormControl.value,
+        this.returnUrl
+      );
+      this.sent = true;
+      this.http.post('/api/user/login', loginUser).subscribe(() => {}, (error: HttpErrorResponse) => {
+        this.errorHandler.handleFormError(error, this.emailFormControl);
+        this.sent = false;
+      });
+    }
   }
 
   externalLogin(provider: string) {

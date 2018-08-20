@@ -14,7 +14,7 @@
     using PictIt.Models;
 
     [Area("User")]
-    public class AuthenticatorController : AnonymousApiController
+    public class AuthenticatorController : AuthorizedApiController
     {
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
@@ -70,10 +70,10 @@
                 IEnumerable<string> recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
                 string[] recoveryCodesArray = recoveryCodes.ToArray();
                 string redirectUrl = $"/show-codes?{recoveryCodesArray.Aggregate(string.Empty, (result, item) => result + (result.Length > 0 ? "&" : string.Empty) + "recoveryCodes=" + item)}";
-                return Redirect(redirectUrl);
+                return StatusCode(209, redirectUrl);
             }
 
-            return Redirect("/profile");
+            return StatusCode(209, "/profile");
         }
 
         private async Task<AuthenticatorUser> LoadSharedKeyAndQrCodeUriAsync(User user)

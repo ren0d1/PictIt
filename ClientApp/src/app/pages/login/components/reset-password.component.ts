@@ -3,8 +3,9 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 import * as XRegExp from 'xregexp';
 
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ResetPassword } from '../../../shared/models/reset-password.model';
+import { HttpErrorHandlerService } from '../../../shared/services/http-error-handler.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -12,7 +13,7 @@ import { ResetPassword } from '../../../shared/models/reset-password.model';
   styleUrls: ['./reset-password.component.css']
 })
 export class ResetPasswordComponent implements OnInit {
-  constructor(private activeRoute: ActivatedRoute, private http: HttpClient, private router: Router) {}
+  constructor(private activeRoute: ActivatedRoute, private http: HttpClient, private router: Router, private errorHandler: HttpErrorHandlerService) {}
 
   emailFormControl = new FormControl('', [
     Validators.required,
@@ -62,8 +63,9 @@ export class ResetPasswordComponent implements OnInit {
         setTimeout(() => {
           this.router.navigate(['login']);
         }, 5000);  // 5s
-      }, error => {
+      }, (error: HttpErrorResponse) => {
         this.success = false;
+        this.errorHandler.handleError(error);
         setTimeout(() => {
           this.router.navigate(['home']);
         }, 5000);  // 5s

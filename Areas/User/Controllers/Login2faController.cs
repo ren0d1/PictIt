@@ -23,7 +23,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> AuthenticatorCodeCheck([FromForm] Login2faUser authenticationUser)
+        public async Task<IActionResult> AuthenticatorCodeCheck([FromBody] Login2faUser authenticationUser)
         {
             authenticationUser.ReturnUrl = authenticationUser.ReturnUrl ?? Url.Content("~/");
 
@@ -40,17 +40,17 @@
             if (result.Succeeded)
             {
                 _logger.LogInformation("User with ID '{UserId}' logged in with 2fa.", user.Id);
-                return LocalRedirect(authenticationUser.ReturnUrl);
+                return StatusCode(209, authenticationUser.ReturnUrl);
             }
             
             if (result.IsLockedOut)
             {
                 _logger.LogWarning("User with ID '{UserId}' account locked out.", user.Id);
-                return RedirectToPage("./Lockout");
+                return StatusCode(209, $"/lockout?email={user.Email}");
             }
             
              _logger.LogWarning("Invalid authenticator code entered for user with ID '{UserId}'.", user.Id);
-            return Redirect("~/");
+            return UnprocessableEntity("Code is invalid.");
         }
 
         [HttpPost("RecoveryCode")]
@@ -69,13 +69,13 @@
             if (result.Succeeded)
             {
                 _logger.LogInformation("User with ID '{UserId}' logged in with a recovery code.", user.Id);
-                return LocalRedirect(recovery2faLogin.ReturnUrl ?? Url.Content("~/"));
+                return StatusCode(209, recovery2faLogin.ReturnUrl ?? Url.Content("/home"));
             }
 
             if (result.IsLockedOut)
             {
                 _logger.LogWarning("User with ID '{UserId}' account locked out.", user.Id);
-                return RedirectToPage("./Lockout");
+                return StatusCode(209, $"/lockout?email={user.Email}");
             }
             
             _logger.LogWarning("Invalid recovery code entered for user with ID '{UserId}' ", user.Id);

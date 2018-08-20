@@ -10,7 +10,7 @@
     using PictIt.Models;
 
     [Area("User")]
-    public class LogoutController : AnonymousApiController
+    public class LogoutController : AuthorizedApiController
     {
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LogoutController> _logger;

@@ -14,7 +14,7 @@
     using PictIt.Models;
 
     [Area("User")]
-    public class Authentication2faController : AnonymousApiController
+    public class Authentication2faController : AuthorizedApiController
     {
         private const string AuthenicatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}";
 
@@ -63,7 +63,7 @@
 
         [HttpPost]
         [Route("GenerateRecoveryCodes")]
-        public async Task<IActionResult> GenerateRecoveryCodes()
+        public async Task<ActionResult<string[]>> GenerateRecoveryCodes()
         {
             User user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -81,9 +81,7 @@
             IEnumerable<string> recoveryCodes = await _userManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
             _logger.LogInformation("User with ID '{UserId}' has generated new 2FA recovery codes.", userId);
 
-            string[] recoveryCodesArray = recoveryCodes.ToArray();
-            string redirectUrl = $"/show-codes?{recoveryCodesArray.Aggregate(string.Empty, (result, item) => result + (result.Length > 0 ? "&" : string.Empty) + "recoveryCodes=" + item)}";
-            return Redirect(redirectUrl);
+            return recoveryCodes.ToArray();
         }
 
         [HttpPost]
