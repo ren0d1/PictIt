@@ -73,6 +73,6 @@ export class LoginComponent implements OnInit {
     };
 
     // Using window.location instead of router plays loading screen animation
-    window.location.href = 'https://localhost:44399/api/user/externallogin?' + encodeGetParams(params);
+    window.location.href = window.location.origin + '/api/user/externallogin?' + encodeGetParams(params);
   }
 }

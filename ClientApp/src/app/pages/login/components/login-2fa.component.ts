@@ -33,7 +33,7 @@ export class Login2faComponent implements OnInit {
     });
   }
 
-  sendForm(form: HTMLFormElement) {
+  sendForm() {
     this.sent = true;
     if (this.login2faForm.valid) {
       this.http.post('/api/user/Login2fa', {'TwoFactorCode': this.twoFactorCodeFormControl.value}, { params : new HttpParams().set('returnUrl', this.returnUrl)}).subscribe(() => {}, (error: HttpErrorResponse) => {

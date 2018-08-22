@@ -10,6 +10,8 @@ export const authConfig: AuthConfig = {
   // URL of the SPA to redirect the user to after login
   redirectUri: window.location.origin + '/auth-callback',
 
+  responseType: 'id_token token',
+
   // The SPA's id. The SPA is registerd with this id at the auth-server
   clientId: 'pict_it_spa',
 

@@ -48,15 +48,18 @@
                                        },
                                    RedirectUris = 
                                        {
-                                          "https://localhost:44399/auth-callback" 
+                                          "https://localhost:44399/auth-callback",
+                                          "https://pictit.azurewebsites.net/auth-callback"
                                        },
                                    PostLogoutRedirectUris = 
                                        {
-                                            "https://localhost:44399/" 
+                                          "https://localhost:44399/",
+                                           "https://pictit.azurewebsites.net/"
                                        },
                                    AllowedCorsOrigins = 
                                        {
-                                            "https://localhost:44399/" 
+                                          "https://localhost:44399/",
+                                           "https://pictit.azurewebsites.net/"
                                        },
                                    AllowAccessTokensViaBrowser = true,
                                    AccessTokenLifetime = 3600
