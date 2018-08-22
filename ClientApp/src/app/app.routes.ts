@@ -55,8 +55,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'auth-callback',
-    component: AuthCallbackComponent,
-    canActivate: [AuthGuardService]
+    component: AuthCallbackComponent
   },
   {
     path: '**',

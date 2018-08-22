@@ -16,7 +16,11 @@ export class AuthCallbackComponent implements OnInit {
 
   ngOnInit() {
     this.claims = this.oauthService.getIdentityClaims();
-
-    this.router.navigate(['gallery']);
+    let wait = setInterval(() => {
+      if(window.location.href.indexOf('#') === -1){
+        this.router.navigate(['gallery']);
+        clearInterval(wait);
+      }
+    }, 1000);
   }
 }
