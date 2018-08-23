@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpErrorHandlerService } from '../../../shared/services/http-error-handler.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -7,6 +9,8 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
   styleUrls: ['./forgot-password.component.css']
 })
 export class ForgotPasswordComponent implements OnInit {
+  constructor(private http: HttpClient, private errorHandler: HttpErrorHandlerService){}
+
   emailFormControl = new FormControl('', [
     Validators.required,
     Validators.email,
@@ -22,8 +26,14 @@ export class ForgotPasswordComponent implements OnInit {
     });
   }
 
-  sendForm(form: HTMLFormElement) {
+  sendForm() {
     this.sent = true;
-    form.submit();
+
+    if (this.forgotPassword.valid) {
+      this.http.post('/api/user/ForgotPassword', null, {params: new HttpParams().set('email', this.emailFormControl.value)}).subscribe(() => {}, (error: HttpErrorResponse) => {
+        this.sent = false;
+        this.errorHandler.handleError(error);
+      });
+    }
   }
 }

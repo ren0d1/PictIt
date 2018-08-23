@@ -26,13 +26,13 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> GenerateRecoveryCode([FromForm] string email)
+        public async Task<IActionResult> GenerateRecoveryCode([FromQuery] string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
             {
                 // Don't reveal that the user does not exist or is not confirmed
-                return Redirect("/home");
+                return StatusCode(209, "/home");
             }
 
             string code = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -43,7 +43,7 @@
                 "Reset Password",
                 $"You can reset your password by <a href='{callbackUrl}'>clicking here</a>.");
 
-            return Redirect("/home");
+            return StatusCode(209, "/home");
         }
     }
 }

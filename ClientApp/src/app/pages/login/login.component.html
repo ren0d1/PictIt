@@ -26,7 +26,9 @@
     <button mat-raised-button type="submit" color="primary" form="LoginForm" [disabled]="!loginForm.valid">Login</button>
   </form>
   <a *ngIf="!sent" [routerLink]="['/forgot-password']">Forgot password?</a>
-  <button mat-raised-button color="primary" *ngIf="!sent" *ngFor="let provider of availableProviders" (click)="externalLogin(provider.name)">{{provider.displayName}}</button>
+  <div *ngIf="!sent">
+    <button mat-raised-button color="primary" *ngFor="let provider of availableProviders" (click)="externalLogin(provider.name)">{{provider.displayName}}</button>  
+  </div>
   <div *ngIf="sent" class="bar">
     <div class="circle"></div>
     <p>Logging in in progress</p>

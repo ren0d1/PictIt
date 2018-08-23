@@ -12,7 +12,7 @@ export class HttpErrorHandlerService {
   handleError(error: HttpErrorResponse) {
     switch(error.status){
       case 209:
-        window.location.href = 'https://localhost:44399' + error.error.text;
+        window.location.href = window.location.origin + error.error.text;
         break;
       case 401:
         this.router.navigate(['unauthorized']);
