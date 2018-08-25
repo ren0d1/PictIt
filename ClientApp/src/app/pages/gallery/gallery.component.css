@@ -1,13 +1,61 @@
+.blue {
+    background-color: deepskyblue;
+}
+
+.pink {
+    background-color: deeppink;
+}
+
 .mat-card {
-    width: 400px;
+    width: 20vw;
+    height: 20vw;
+    padding: 0;
     margin: 2rem auto;
+    border: 2px dashed black;
+    background-color: transparent;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
 }
 
 .mat-card .mat-card-actions {
-padding-top: 0;
+    padding: 0;
+    margin: 0;
+    width: 80%;
+    height: 80%;
 }
 
 .mat-card .mat-button {
-margin: 0 auto;
-display: block;
+    margin: 0 auto;
+    display: block;
+}
+
+.mat-fab {
+    width: 100%;
+    height: 100%;
+}
+
+.mat-fab /deep/.mat-button-wrapper {
+    padding: 20% 0;
+    width: 100%;
+    height: 100%;
+}
+
+.mat-icon {
+    width: 60%;
+    height: 60%;
+    font-size: 12rem;
+}
+
+.rotating {
+    -webkit-animation: rotate 5s infinite;
+}
+
+@-webkit-keyframes rotate {
+    0% {-webkit-transform: rotate(90deg);}
+    50% {-webkit-transform: rotate(180deg);}
+    75% {-webkit-transform: rotate(270deg);}
+    100% {-webkit-transform: rotate(360deg);}
 }

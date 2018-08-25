@@ -1,18 +1,14 @@
 ﻿namespace PictIt.Areas.Picture.Controllers
 {
     using System;
-    using System.IO;
     using System.Net.Http;
     using System.Net.Http.Formatting;
-    using System.Net.Http.Headers;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
-
-    using PictIt.Services;
 
     [Area("Picture")]
     public class IsAFaceController : AnonymousApiController

@@ -1,17 +1,21 @@
 <main>
   <h1>Gallery</h1>
-  <mat-card>
+  <mat-card *ngFor="let search of searches" [class.blue]="search.gender === 'male'" [class.pink]="search.gender === 'female'">
+    <mat-card-title>
+      <bdi>{{search.userName}}: {{search.age}}</bdi>
+      <br>
+      {{search.emotion}}
+    </mat-card-title>
+    <img mat-card-image [src]="'https://faceme.blob.core.windows.net/pictures/' + search.pictureId + '.jpg'">
+  </mat-card>
+  <mat-card dnd-droppable (onDropSuccess)="transferDataSuccess($event)" (click)="Files.click()">
     <mat-card-actions>
       <button 
-        color="primary" 
-        (click)="generateSrc()"
-        mat-raised-button>
-        Give me another cat
+        color="primary"
+        mat-fab>
+        <mat-icon [class.rotating]="clicked">{{icon}}</mat-icon>
       </button>
     </mat-card-actions>
-    <img 
-      src="{{ src }}" 
-      alt="Cute cat"
-      mat-card-image>
+    <input type="file" id="files" name="files" accept="image/*" #Files (change)="fileSelected(Files.files)" style="display:none" />
   </mat-card>
 </main>

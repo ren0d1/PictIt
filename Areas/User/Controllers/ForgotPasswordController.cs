@@ -1,6 +1,5 @@
 ﻿namespace PictIt.Areas.User.Controllers
 {
-    using System.Text.Encodings.Web;
     using System.Threading.Tasks;
     using System.Web;
 

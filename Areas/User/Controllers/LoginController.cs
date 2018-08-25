@@ -13,8 +13,6 @@
     using PictIt.Areas.User.Models;
     using PictIt.Models;
 
-    using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
-
     [Area("User")]
     public class LoginController : AnonymousApiController
     {

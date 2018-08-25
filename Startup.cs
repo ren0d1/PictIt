@@ -154,6 +154,7 @@
 
             // Repositories
             services.AddScoped<PictureRepository, PictureRepository>();
+            services.AddScoped<SearchRepository, SearchRepository>();
 
             // Email service
             services.AddSingleton<IEmailSender, EmailSender>();
