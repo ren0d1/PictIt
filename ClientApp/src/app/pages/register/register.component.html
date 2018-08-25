@@ -1,7 +1,7 @@
 <main >
   <div *ngIf="sent" class="bar">
     <div class="circle"></div>
-    <p>Registration in progress</p>
+    <p>{{registered ? 'Uploading pictures' : 'Registration in progress'}}</p>
   </div>
   <form id="RegistrationForm" name="RegistrationForm" [formGroup]="registrationForm" autocomplete="on" (ngSubmit)="onSubmit()" *ngIf="!sent">
     <fieldset id="userIdentity" name="userIdentity" form="RegistrationForm">
@@ -53,6 +53,22 @@
       </mat-error>
     </mat-form-field>
     <mat-checkbox form="RegistrationForm" name="AcceptTerms" [formControl]="termsAndConditionsFormControl">I accept the <strong>terms</strong> and <strong>conditions</strong>.</mat-checkbox>
+    <mat-error *ngIf="picturesFormControl.hasError('notEnough')">
+        You need to provide at least <strong>5</strong> pictures.
+    </mat-error>
+    <mat-error *ngIf="improperFace">
+        We either <strong>could not detect</strong> a face or we <strong>detected too many</strong> faces in one or more of the pictures you chose.
+    </mat-error>
+    <div class="dropzone" dnd-droppable (onDropSuccess)="transferDataSuccess($event)" (click)="Files.click()">
+      <mat-card *ngFor="let picture of pictures" [hidden]="uploadingPicture">
+        <button mat-mini-fab color="warn" class="discard-picture" (click)="deletePicture(picture); $event.stopPropagation()">x</button>
+        <picture class="picture">
+          <img mat-card-image [src]="picture.src">
+        </picture>
+      </mat-card>
+      <mat-progress-spinner *ngIf="uploadingPicture" [color]="primary" mode="indeterminate"></mat-progress-spinner>
+      <input type="file" form="RegistrationForm" id="files" name="files" accept="image/*" #Files multiple (change)="fileSelected(Files.files)" [formControl]="picturesFormControl" style="display:none" />
+    </div>
     <button mat-raised-button type="submit" color="primary" form="RegistrationForm" name="Register" value="Register" [disabled]="!registrationForm.valid">Register</button>
   </form>
 </main>

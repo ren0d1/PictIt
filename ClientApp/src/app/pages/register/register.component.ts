@@ -4,6 +4,7 @@ import * as XRegExp from 'xregexp';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { RegisterUser } from '../../shared/models/register-user.model';
 import { EmailLookup } from '../../shared/models/email-lookup.model';
+import { Picture } from '../../shared/models/picture.model';
 import { HttpErrorHandlerService } from '../../shared/services/http-error-handler.service';
 import { Router } from '@angular/router';
 
@@ -50,7 +51,14 @@ export class RegisterComponent implements OnInit {
     Validators.requiredTrue
   ]);
 
+  picturesFormControl = new FormControl('', []);
+
   sent = false;
+  registered = false;
+  uploadingPicture = false;
+  improperFace = false;
+
+  pictures: Picture[] = [];
 
   ngOnInit() {
     this.registrationForm = new FormGroup ({
@@ -59,8 +67,15 @@ export class RegisterComponent implements OnInit {
       userNameFormControl: this.userNameFormControl,
       emailFormControl: this.emailFormControl,
       passwordFormControl: this.passwordFormControl,
-      termsAndConditionsFormControl: this.termsAndConditionsFormControl
+      termsAndConditionsFormControl: this.termsAndConditionsFormControl,
+      picturesFormControl: this.picturesFormControl
     }, this.userIdentityKnown);
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.picturesFormControl.setErrors({ notEnough: true });
+    });
   }
 
   onSubmit() {
@@ -77,11 +92,23 @@ export class RegisterComponent implements OnInit {
 
         this.sent = true;
 
-        this.http.post('api/user/register', userToRegister).subscribe(result => {
-          this.router.navigate(['confirm-email']);
+        this.http.post('api/user/register', userToRegister).subscribe((userId: string) => {
+          this.registered = true;
+
+          let formData = new FormData();
+          formData.append('userId', userId);
+          for(let i = 0; i < this.pictures.length; i++){
+            formData.append('files', this.pictures[i].file);
+          }
+
+          this.http.post('api/user/picture', formData).subscribe((userId: string) => {
+            this.router.navigate(['confirm-email']);
+          }, (error: HttpErrorResponse) => {
+            this.errorHandler.handleError(error);
+            this.sent = false;
+          });
         }, (error: HttpErrorResponse) => {
           this.errorHandler.handleError(error);
-          this.sent = false;
         });
       }
     });
@@ -104,5 +131,72 @@ export class RegisterComponent implements OnInit {
       }
       callback();
     }, (error: HttpErrorResponse) => this.errorHandler.handleError(error));
+  }
+
+  fileSelected(files: FileList){
+    this.uploadingPicture = true;
+    for(let i = 0; i < files.length; i++){
+      this.checkIfFaceIsPresent(files[i], () => {
+        this.pictures.push(new Picture(files[i], '', true));
+        this.getImageSrc(files[i], this.pictures[this.pictures.length - 1]);
+        this.picturesFormControl.setErrors(this.pictures.length < 5 ? { notEnough: true } : null);
+      });
+    }
+  }
+
+  transferDataSuccess(param: any) {
+    let dataTransfer: DataTransfer = param.mouseEvent.dataTransfer;
+    if (dataTransfer && dataTransfer.files) { 
+      let files: FileList = dataTransfer.files;
+      this.uploadingPicture = true;
+      for(let i = 0; i < files.length; i++){
+        this.checkIfFaceIsPresent(files[i], () => {
+          this.pictures.push(new Picture(files[i], '', true));
+          this.getImageSrc(files[i], this.pictures[this.pictures.length - 1]);
+          this.picturesFormControl.setErrors(this.pictures.length < 5 ? { notEnough: true } : null);
+        });
+      }
+    }
+  }
+
+  checkIfFaceIsPresent(file: File, callback: Function){
+    let formData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post('api/picture/isAFace', formData).subscribe((isAFace: boolean) => {
+      if(isAFace)
+      {
+        callback();
+      } else {
+        this.improperFace = true;
+      }
+    });
+  }
+
+  getImageSrc(file: File, picture: Picture){
+    var fr = new FileReader();
+
+    fr.onload = (event) => {
+      picture.src = event.target.result;
+
+      let countSrc = 0;
+      for(let i = 0; i < this.pictures.length; i++){
+        if(this.pictures[i].src.length > 0){
+          countSrc++;
+        }
+      }
+
+      if(countSrc === this.pictures.length){
+        this.uploadingPicture = false;
+      }
+    };
+
+    fr.readAsDataURL(file);
+  }
+
+  deletePicture(picture: Picture){
+    this.pictures.splice(this.pictures.indexOf(picture), 1);
+    this.picturesFormControl.setErrors(this.pictures.length < 5 ? { notEnough: true } : null);
+    this.improperFace = false;
   }
 }

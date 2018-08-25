@@ -101,7 +101,7 @@
                                 $"Please confirm your account by <a href='{callbackUrl}'>clicking here</a>.");
 
                             _logger.LogInformation($"'{userToRegister.Email}' successfully registered.");
-                            return Ok();
+                            return new JsonResult(newUser.Id);
                         }
 
                         _logger.LogError($"The following internal error(s) prevented registration : {result.Errors}.");

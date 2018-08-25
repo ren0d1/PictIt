@@ -20,22 +20,33 @@
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="2.3.0-preview1-update1" />
     <PackageReference Include="IdentityServer4.EntityFramework" Version="2.3.0-preview1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="2.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="2.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="2.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="2.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.AutoHistory" Version="2.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="2.1.1" />
     <PackageReference Include="ScottBrady91.AspNetCore.Identity.Argon2PasswordHasher" Version="1.0.0" />
     <PackageReference Include="Sendgrid" Version="9.9.0" />
+    <PackageReference Include="WebApi.BinaryMediaTypeFormatter" Version="1.0.5" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.3.1" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
     <Content Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20180823223101_PictureMigration.cs" />
+    <Compile Remove="Migrations\20180823223101_PictureMigration.Designer.cs" />
+    <Compile Remove="Migrations\20180823223432_PictureMigration2.cs" />
+    <Compile Remove="Migrations\20180823223432_PictureMigration2.Designer.cs" />
+    <Compile Remove="Migrations\20180823223528_PictureMigration3.cs" />
+    <Compile Remove="Migrations\20180823223528_PictureMigration3.Designer.cs" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

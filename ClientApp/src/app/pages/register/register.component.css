@@ -48,4 +48,54 @@ p {
   50% {left: 100%; -webkit-transform: rotate(450deg); width: 150px; height: 150px;}
   75% {left: 100%; -webkit-transform: rotate(450deg); width: 150px; height: 150px;}
   100% {right: 100%;}
-} 
+}
+
+.dropzone {
+  margin: 2rem auto;
+  width: 1400px;
+  height: 500px;
+  border: 2px dashed;
+  background-color: greenyellow;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.dropzone > label {
+  cursor: pointer;
+}
+
+.mat-card {
+  width: 400px;
+  height: 400px;
+  margin: 2rem auto;
+  padding: 0;
+}
+
+.mat-card[hidden] {
+  display: none;
+}
+
+.mat-card-image {
+  object-fit: cover;
+  width: 400px;
+  height: 400px;
+  margin: 0;
+}
+
+.mat-card-image:first-child {
+  margin-top: -40px; /* Size of the icon */
+}
+
+.discard-picture {
+  float: right;
+  top: -5%;
+  right: -5%;
+}
+
+.picture {
+  width: 400px;
+  height: 400px;
+  overflow: hidden;
+}

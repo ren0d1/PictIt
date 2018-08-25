@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatInputModule, MatButtonModule, MatIconModule, MatCheckboxModule } from '@angular/material';
+import { MatInputModule, MatButtonModule, MatIconModule, MatCheckboxModule, MatCardModule, MatProgressSpinnerModule } from '@angular/material';
+import { DndModule } from 'ng2-dnd';
 
 import { RegisterRouting } from './register.routes';
 
@@ -20,6 +21,9 @@ import { RegisterConfirmEmailComponent } from './components/register-confirm-ema
     MatButtonModule,
     MatIconModule,
     MatCheckboxModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
+    DndModule.forRoot(),
     RegisterRouting
   ],
   exports: [

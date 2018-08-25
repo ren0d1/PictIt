@@ -16,6 +16,7 @@
     using Microsoft.Extensions.DependencyInjection;
 
     using PictIt.Models;
+    using PictIt.Repositories;
     using PictIt.Services;
 
     using ScottBrady91.AspNetCore.Identity;
@@ -150,6 +151,9 @@
             services.AddAuthorization();
 
             #endregion
+
+            // Repositories
+            services.AddScoped<PictureRepository, PictureRepository>();
 
             // Email service
             services.AddSingleton<IEmailSender, EmailSender>();
