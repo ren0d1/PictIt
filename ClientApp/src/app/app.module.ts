@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { MatToolbarModule, MatCardModule, MatSidenavModule, MatListModule, MatMenuModule, MatButtonModule, MatIconModule, MatSlideToggleModule, MatCheckboxModule } from '@angular/material';
+import { DndModule } from 'ng2-dnd';
 
 import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -62,6 +63,7 @@ export function createTranslateLoader(http: HttpClient) {
     MatIconModule,
     MatSlideToggleModule,
     MatCheckboxModule,
+    DndModule.forRoot(),
     RegisterModule,
     LoginModule,
     ConsentModule,

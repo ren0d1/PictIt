@@ -15,7 +15,7 @@ namespace PictIt.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.1.2-rtm-30932")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -618,6 +618,432 @@ namespace PictIt.Migrations
                     b.ToTable("AutoHistory");
                 });
 
+            modelBuilder.Entity("PictIt.Models.Accessory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<decimal>("Confidence");
+
+                    b.Property<Guid?>("FaceAttributesId");
+
+                    b.Property<string>("Type");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FaceAttributesId");
+
+                    b.ToTable("Accessory");
+                });
+
+            modelBuilder.Entity("PictIt.Models.Blur", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("BlurLevel");
+
+                    b.Property<decimal>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Blur");
+                });
+
+            modelBuilder.Entity("PictIt.Models.Coords", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<decimal>("X");
+
+                    b.Property<decimal>("Y");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Coords");
+                });
+
+            modelBuilder.Entity("PictIt.Models.Emotion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<decimal>("Anger");
+
+                    b.Property<decimal>("Contempt");
+
+                    b.Property<decimal>("Disgust");
+
+                    b.Property<decimal>("Fear");
+
+                    b.Property<decimal>("Happiness");
+
+                    b.Property<decimal>("Neutral");
+
+                    b.Property<decimal>("Sadness");
+
+                    b.Property<decimal>("Surprise");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Emotion");
+                });
+
+            modelBuilder.Entity("PictIt.Models.Exposure", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ExposureLevel");
+
+                    b.Property<decimal>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Exposure");
+                });
+
+            modelBuilder.Entity("PictIt.Models.Face", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid?>("FaceAttributesId");
+
+                    b.Property<string>("FaceId");
+
+                    b.Property<Guid?>("FaceLandmarksId");
+
+                    b.Property<Guid?>("FaceRectangleId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FaceAttributesId");
+
+                    b.HasIndex("FaceLandmarksId");
+
+                    b.HasIndex("FaceRectangleId");
+
+                    b.ToTable("Face");
+                });
+
+            modelBuilder.Entity("PictIt.Models.FaceAttributes", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Age");
+
+                    b.Property<Guid?>("BlurId");
+
+                    b.Property<Guid?>("EmotionId");
+
+                    b.Property<Guid?>("ExposureId");
+
+                    b.Property<Guid?>("FacialHairId");
+
+                    b.Property<string>("Gender");
+
+                    b.Property<string>("Glasses");
+
+                    b.Property<Guid?>("HairId");
+
+                    b.Property<Guid?>("MakeupId");
+
+                    b.Property<Guid?>("NoiseId");
+
+                    b.Property<Guid?>("OcclusionId");
+
+                    b.Property<decimal>("Smile");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BlurId");
+
+                    b.HasIndex("EmotionId");
+
+                    b.HasIndex("ExposureId");
+
+                    b.HasIndex("FacialHairId");
+
+                    b.HasIndex("HairId");
+
+                    b.HasIndex("MakeupId");
+
+                    b.HasIndex("NoiseId");
+
+                    b.HasIndex("OcclusionId");
+
+                    b.ToTable("FaceAttributes");
+                });
+
+            modelBuilder.Entity("PictIt.Models.FaceLandmarks", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid?>("EyeLeftBottomId");
+
+                    b.Property<Guid?>("EyeLeftInnerId");
+
+                    b.Property<Guid?>("EyeLeftOuterId");
+
+                    b.Property<Guid?>("EyeLeftTopId");
+
+                    b.Property<Guid?>("EyeRightBottomId");
+
+                    b.Property<Guid?>("EyeRightInnerId");
+
+                    b.Property<Guid?>("EyeRightOuterId");
+
+                    b.Property<Guid?>("EyeRightTopId");
+
+                    b.Property<Guid?>("EyebrowLeftInnerId");
+
+                    b.Property<Guid?>("EyebrowLeftOuterId");
+
+                    b.Property<Guid?>("EyebrowRightInnerId");
+
+                    b.Property<Guid?>("EyebrowRightOuterId");
+
+                    b.Property<Guid?>("MouthLeftId");
+
+                    b.Property<Guid?>("MouthRightId");
+
+                    b.Property<Guid?>("NoseLeftAlarOutTipId");
+
+                    b.Property<Guid?>("NoseLeftAlarTopId");
+
+                    b.Property<Guid?>("NoseRightAlarOutTipId");
+
+                    b.Property<Guid?>("NoseRightAlarTopId");
+
+                    b.Property<Guid?>("NoseRootLeftId");
+
+                    b.Property<Guid?>("NoseRootRightId");
+
+                    b.Property<Guid?>("NoseTipId");
+
+                    b.Property<Guid?>("PupilLeftId");
+
+                    b.Property<Guid?>("PupilRightId");
+
+                    b.Property<Guid?>("UnderLipBottomId");
+
+                    b.Property<Guid?>("UnderLipTopId");
+
+                    b.Property<Guid?>("UpperLipBottomId");
+
+                    b.Property<Guid?>("UpperLipTopId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EyeLeftBottomId");
+
+                    b.HasIndex("EyeLeftInnerId");
+
+                    b.HasIndex("EyeLeftOuterId");
+
+                    b.HasIndex("EyeLeftTopId");
+
+                    b.HasIndex("EyeRightBottomId");
+
+                    b.HasIndex("EyeRightInnerId");
+
+                    b.HasIndex("EyeRightOuterId");
+
+                    b.HasIndex("EyeRightTopId");
+
+                    b.HasIndex("EyebrowLeftInnerId");
+
+                    b.HasIndex("EyebrowLeftOuterId");
+
+                    b.HasIndex("EyebrowRightInnerId");
+
+                    b.HasIndex("EyebrowRightOuterId");
+
+                    b.HasIndex("MouthLeftId");
+
+                    b.HasIndex("MouthRightId");
+
+                    b.HasIndex("NoseLeftAlarOutTipId");
+
+                    b.HasIndex("NoseLeftAlarTopId");
+
+                    b.HasIndex("NoseRightAlarOutTipId");
+
+                    b.HasIndex("NoseRightAlarTopId");
+
+                    b.HasIndex("NoseRootLeftId");
+
+                    b.HasIndex("NoseRootRightId");
+
+                    b.HasIndex("NoseTipId");
+
+                    b.HasIndex("PupilLeftId");
+
+                    b.HasIndex("PupilRightId");
+
+                    b.HasIndex("UnderLipBottomId");
+
+                    b.HasIndex("UnderLipTopId");
+
+                    b.HasIndex("UpperLipBottomId");
+
+                    b.HasIndex("UpperLipTopId");
+
+                    b.ToTable("FaceLandmarks");
+                });
+
+            modelBuilder.Entity("PictIt.Models.FaceRectangle", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Height");
+
+                    b.Property<int>("Left");
+
+                    b.Property<int>("Top");
+
+                    b.Property<int>("Width");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FaceRectangle");
+                });
+
+            modelBuilder.Entity("PictIt.Models.FacialHair", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<decimal>("Beard");
+
+                    b.Property<decimal>("Moustache");
+
+                    b.Property<decimal>("Sideburns");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FacialHair");
+                });
+
+            modelBuilder.Entity("PictIt.Models.Hair", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<decimal>("Bald");
+
+                    b.Property<bool>("Invisible");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Hair");
+                });
+
+            modelBuilder.Entity("PictIt.Models.HairColor", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Color");
+
+                    b.Property<decimal>("Confidence");
+
+                    b.Property<Guid?>("HairId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HairId");
+
+                    b.ToTable("HairColor");
+                });
+
+            modelBuilder.Entity("PictIt.Models.Makeup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("EyeMakeup");
+
+                    b.Property<bool>("LipMakeup");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Makeup");
+                });
+
+            modelBuilder.Entity("PictIt.Models.Noise", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("NoiseLevel");
+
+                    b.Property<decimal>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Noise");
+                });
+
+            modelBuilder.Entity("PictIt.Models.Occlusion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("EyeOccluded");
+
+                    b.Property<bool>("ForeheadOccluded");
+
+                    b.Property<bool>("MouthOccluded");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Occlusion");
+                });
+
+            modelBuilder.Entity("PictIt.Models.Picture", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Extension");
+
+                    b.Property<Guid?>("FaceId");
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FaceId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Pictures");
+                });
+
+            modelBuilder.Entity("PictIt.Models.Search", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<Guid>("PictureId");
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Searches");
+                });
+
             modelBuilder.Entity("PictIt.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -648,6 +1074,8 @@ namespace PictIt.Migrations
                         .HasMaxLength(256);
 
                     b.Property<string>("PasswordHash");
+
+                    b.Property<Guid>("PersonId");
 
                     b.Property<string>("PhoneNumber");
 
@@ -842,6 +1270,201 @@ namespace PictIt.Migrations
                 {
                     b.HasOne("PictIt.Models.User")
                         .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("PictIt.Models.Accessory", b =>
+                {
+                    b.HasOne("PictIt.Models.FaceAttributes")
+                        .WithMany("Accessories")
+                        .HasForeignKey("FaceAttributesId");
+                });
+
+            modelBuilder.Entity("PictIt.Models.Face", b =>
+                {
+                    b.HasOne("PictIt.Models.FaceAttributes", "FaceAttributes")
+                        .WithMany()
+                        .HasForeignKey("FaceAttributesId");
+
+                    b.HasOne("PictIt.Models.FaceLandmarks", "FaceLandmarks")
+                        .WithMany()
+                        .HasForeignKey("FaceLandmarksId");
+
+                    b.HasOne("PictIt.Models.FaceRectangle", "FaceRectangle")
+                        .WithMany()
+                        .HasForeignKey("FaceRectangleId");
+                });
+
+            modelBuilder.Entity("PictIt.Models.FaceAttributes", b =>
+                {
+                    b.HasOne("PictIt.Models.Blur", "Blur")
+                        .WithMany()
+                        .HasForeignKey("BlurId");
+
+                    b.HasOne("PictIt.Models.Emotion", "Emotion")
+                        .WithMany()
+                        .HasForeignKey("EmotionId");
+
+                    b.HasOne("PictIt.Models.Exposure", "Exposure")
+                        .WithMany()
+                        .HasForeignKey("ExposureId");
+
+                    b.HasOne("PictIt.Models.FacialHair", "FacialHair")
+                        .WithMany()
+                        .HasForeignKey("FacialHairId");
+
+                    b.HasOne("PictIt.Models.Hair", "Hair")
+                        .WithMany()
+                        .HasForeignKey("HairId");
+
+                    b.HasOne("PictIt.Models.Makeup", "Makeup")
+                        .WithMany()
+                        .HasForeignKey("MakeupId");
+
+                    b.HasOne("PictIt.Models.Noise", "Noise")
+                        .WithMany()
+                        .HasForeignKey("NoiseId");
+
+                    b.HasOne("PictIt.Models.Occlusion", "Occlusion")
+                        .WithMany()
+                        .HasForeignKey("OcclusionId");
+                });
+
+            modelBuilder.Entity("PictIt.Models.FaceLandmarks", b =>
+                {
+                    b.HasOne("PictIt.Models.Coords", "EyeLeftBottom")
+                        .WithMany()
+                        .HasForeignKey("EyeLeftBottomId");
+
+                    b.HasOne("PictIt.Models.Coords", "EyeLeftInner")
+                        .WithMany()
+                        .HasForeignKey("EyeLeftInnerId");
+
+                    b.HasOne("PictIt.Models.Coords", "EyeLeftOuter")
+                        .WithMany()
+                        .HasForeignKey("EyeLeftOuterId");
+
+                    b.HasOne("PictIt.Models.Coords", "EyeLeftTop")
+                        .WithMany()
+                        .HasForeignKey("EyeLeftTopId");
+
+                    b.HasOne("PictIt.Models.Coords", "EyeRightBottom")
+                        .WithMany()
+                        .HasForeignKey("EyeRightBottomId");
+
+                    b.HasOne("PictIt.Models.Coords", "EyeRightInner")
+                        .WithMany()
+                        .HasForeignKey("EyeRightInnerId");
+
+                    b.HasOne("PictIt.Models.Coords", "EyeRightOuter")
+                        .WithMany()
+                        .HasForeignKey("EyeRightOuterId");
+
+                    b.HasOne("PictIt.Models.Coords", "EyeRightTop")
+                        .WithMany()
+                        .HasForeignKey("EyeRightTopId");
+
+                    b.HasOne("PictIt.Models.Coords", "EyebrowLeftInner")
+                        .WithMany()
+                        .HasForeignKey("EyebrowLeftInnerId");
+
+                    b.HasOne("PictIt.Models.Coords", "EyebrowLeftOuter")
+                        .WithMany()
+                        .HasForeignKey("EyebrowLeftOuterId");
+
+                    b.HasOne("PictIt.Models.Coords", "EyebrowRightInner")
+                        .WithMany()
+                        .HasForeignKey("EyebrowRightInnerId");
+
+                    b.HasOne("PictIt.Models.Coords", "EyebrowRightOuter")
+                        .WithMany()
+                        .HasForeignKey("EyebrowRightOuterId");
+
+                    b.HasOne("PictIt.Models.Coords", "MouthLeft")
+                        .WithMany()
+                        .HasForeignKey("MouthLeftId");
+
+                    b.HasOne("PictIt.Models.Coords", "MouthRight")
+                        .WithMany()
+                        .HasForeignKey("MouthRightId");
+
+                    b.HasOne("PictIt.Models.Coords", "NoseLeftAlarOutTip")
+                        .WithMany()
+                        .HasForeignKey("NoseLeftAlarOutTipId");
+
+                    b.HasOne("PictIt.Models.Coords", "NoseLeftAlarTop")
+                        .WithMany()
+                        .HasForeignKey("NoseLeftAlarTopId");
+
+                    b.HasOne("PictIt.Models.Coords", "NoseRightAlarOutTip")
+                        .WithMany()
+                        .HasForeignKey("NoseRightAlarOutTipId");
+
+                    b.HasOne("PictIt.Models.Coords", "NoseRightAlarTop")
+                        .WithMany()
+                        .HasForeignKey("NoseRightAlarTopId");
+
+                    b.HasOne("PictIt.Models.Coords", "NoseRootLeft")
+                        .WithMany()
+                        .HasForeignKey("NoseRootLeftId");
+
+                    b.HasOne("PictIt.Models.Coords", "NoseRootRight")
+                        .WithMany()
+                        .HasForeignKey("NoseRootRightId");
+
+                    b.HasOne("PictIt.Models.Coords", "NoseTip")
+                        .WithMany()
+                        .HasForeignKey("NoseTipId");
+
+                    b.HasOne("PictIt.Models.Coords", "PupilLeft")
+                        .WithMany()
+                        .HasForeignKey("PupilLeftId");
+
+                    b.HasOne("PictIt.Models.Coords", "PupilRight")
+                        .WithMany()
+                        .HasForeignKey("PupilRightId");
+
+                    b.HasOne("PictIt.Models.Coords", "UnderLipBottom")
+                        .WithMany()
+                        .HasForeignKey("UnderLipBottomId");
+
+                    b.HasOne("PictIt.Models.Coords", "UnderLipTop")
+                        .WithMany()
+                        .HasForeignKey("UnderLipTopId");
+
+                    b.HasOne("PictIt.Models.Coords", "UpperLipBottom")
+                        .WithMany()
+                        .HasForeignKey("UpperLipBottomId");
+
+                    b.HasOne("PictIt.Models.Coords", "UpperLipTop")
+                        .WithMany()
+                        .HasForeignKey("UpperLipTopId");
+                });
+
+            modelBuilder.Entity("PictIt.Models.HairColor", b =>
+                {
+                    b.HasOne("PictIt.Models.Hair")
+                        .WithMany("HairColor")
+                        .HasForeignKey("HairId");
+                });
+
+            modelBuilder.Entity("PictIt.Models.Picture", b =>
+                {
+                    b.HasOne("PictIt.Models.Face", "Face")
+                        .WithMany()
+                        .HasForeignKey("FaceId");
+
+                    b.HasOne("PictIt.Models.User")
+                        .WithMany("Pictures")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("PictIt.Models.Search", b =>
+                {
+                    b.HasOne("PictIt.Models.User")
+                        .WithMany("Searches")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

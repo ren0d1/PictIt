@@ -1,0 +1,22 @@
+main {
+    width: 97.5%;
+    height: 80vh;
+    margin: 1rem;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden;
+}
+
+.authenticatorUsingRecoveryCodeForm {
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.mat-form-field { 
+    width: 50%;
+}

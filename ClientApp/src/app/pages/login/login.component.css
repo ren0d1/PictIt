@@ -1,7 +1,11 @@
 main {
-    width: 100%;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    width: 97.5%;
+    margin: 15rem 1rem;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
 }
 
 .bar {
@@ -42,3 +46,61 @@ p {
     75% {left: 100%; -webkit-transform: rotate(450deg); width: 150px; height: 150px;}
     100% {right: 100%;}
 } 
+
+.loginForm {
+    width: 30%;
+    padding: 1rem;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+.loginForm[hidden] {
+    display: none;
+}
+
+.mat-form-field { 
+    width: 80%;
+}
+
+.externalLogins {
+    width: 65%;
+    padding: 1rem;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+    border-right: 1px solid lightslategrey; 
+}
+
+.mat-raised-button {
+    width: 10vw;
+    margin: 1rem;
+}
+
+.forgot-password {
+    text-align: right;
+}
+
+@media screen and (max-width: 480px) {
+    main {
+        height: initial;
+        flex-flow: column nowrap;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .loginForm {
+        width: 95%;
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .externalLogins {
+        width: 95%;
+        border: none; 
+    }
+}

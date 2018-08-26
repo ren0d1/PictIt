@@ -23,6 +23,10 @@
 
         public DbSet<PersistedGrant> PersistedGrants { get; set; }
 
+        public DbSet<Picture> Pictures { get; set; }
+
+        public DbSet<Search> Searches { get; set; }
+
         public Task<int> SaveChangesAsync()
         {
             return base.SaveChangesAsync();

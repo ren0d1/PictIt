@@ -1,4 +1,4 @@
-﻿namespace PictIt.Areas.User
+﻿namespace PictIt.Areas
 {
     using Microsoft.AspNetCore.Authorization;
 

@@ -6,7 +6,6 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Pages.Account.Manage.Internal;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
 
@@ -58,7 +57,7 @@
             }
 
             await _signInManager.ForgetTwoFactorClientAsync();
-            return new OkObjectResult("The current browser has been forgotten. When you login again from this browser you will be prompted for your 2fa code.");
+            return Ok();
         }
 
         [HttpPost]
@@ -101,7 +100,7 @@
             }
 
             _logger.LogInformation("User with ID '{UserId}' has disabled 2fa.", _userManager.GetUserId(User));
-            return new OkObjectResult("2fa has been disabled. You can reenable 2fa when you setup an authenticator app");
+            return Ok();
         }
 
         [HttpPost]
@@ -120,7 +119,7 @@
 
             await _signInManager.RefreshSignInAsync(user);
 
-            return new OkObjectResult("Your authenticator app key has been reset, you will need to configure your authenticator app using the new key.");
+            return Ok();
         }
     }
 }

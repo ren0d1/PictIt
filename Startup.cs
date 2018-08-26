@@ -16,6 +16,7 @@
     using Microsoft.Extensions.DependencyInjection;
 
     using PictIt.Models;
+    using PictIt.Repositories;
     using PictIt.Services;
 
     using ScottBrady91.AspNetCore.Identity;
@@ -89,7 +90,7 @@
                             options.Events.RaiseFailureEvents = true;
                             options.Events.RaiseSuccessEvents = true;
                             options.UserInteraction.LoginUrl = "/login";
-                            options.UserInteraction.LogoutUrl = "/logout";
+                            options.UserInteraction.LogoutUrl = "/api/user/logout";
                         })
                 .AddAspNetIdentity<User>()
                 .AddDeveloperSigningCredential()
@@ -150,6 +151,10 @@
             services.AddAuthorization();
 
             #endregion
+
+            // Repositories
+            services.AddScoped<PictureRepository, PictureRepository>();
+            services.AddScoped<SearchRepository, SearchRepository>();
 
             // Email service
             services.AddSingleton<IEmailSender, EmailSender>();

@@ -3,7 +3,7 @@
         You have requested to log in with a recovery code. This login will not be remembered until you provide
         an authenticator app code at log in or disable 2FA and log in again.
     </p>
-    <form id="AuthenticatorUsingRecoveryCodeForm" name="AuthenticatorUsingRecoveryCodeForm" [formGroup]="authenticatorUsingRecoveryCodeForm" (submit)="sendForm()">
+    <form class="authenticatorUsingRecoveryCodeForm" id="AuthenticatorUsingRecoveryCodeForm" name="AuthenticatorUsingRecoveryCodeForm" [formGroup]="authenticatorUsingRecoveryCodeForm" (submit)="sendForm()">
         <mat-form-field>
             <input matInput type="text" form="AuthenticatorUsingRecoveryCodeForm" name="RecoveryCode" placeholder="Recovery code" [formControl]="recoveryCodeFormControl" minlength="6" maxlength="8">
             <mat-error *ngIf="(recoveryCodeFormControl.hasError('minlength') || recoveryCodeFormControl.hasError('maxlength')) && !recoveryCodeFormControl.hasError('required')">

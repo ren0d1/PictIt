@@ -1,11 +1,10 @@
 ﻿namespace PictIt.Areas.User.Controllers
 {
+    using System;
     using System.Net.Http;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using System.Web;
-
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
@@ -72,7 +71,7 @@
                                 {
                                     _logger.LogInformation($"Username '{userToRegister.UserName}' doesn't match the expected format.");
                                     return new BadRequestObjectResult(userToRegister);
-                            }
+                                }
                             }
                             else
                             {
@@ -101,7 +100,7 @@
                                 $"Please confirm your account by <a href='{callbackUrl}'>clicking here</a>.");
 
                             _logger.LogInformation($"'{userToRegister.Email}' successfully registered.");
-                            return Ok();
+                            return new JsonResult(newUser.Id);
                         }
 
                         _logger.LogError($"The following internal error(s) prevented registration : {result.Errors}.");

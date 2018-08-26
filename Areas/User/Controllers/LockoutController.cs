@@ -2,8 +2,6 @@
 {
     using System.Threading.Tasks;
 
-    using IdentityServer4.Services;
-
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorHandlerService } from '../../shared/services/http-error-handler.service';
+import { SearchDisplay } from '../../shared/models/search-display.model';
 
 @Component({
   selector: 'app-gallery',
@@ -7,28 +10,67 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class GalleryComponent implements OnInit {
+    constructor(private http: HttpClient, private errorHandler: HttpErrorHandlerService) {}
 
-    private image: CatImage = {
-      message: 'Progressive Web Cat',
-      api: 'https://cataas.com/cat/says/',
-      fontsize: 40
-    };
+    icon: string;
+    clicked: boolean;
 
-    public src: string;
+    searches: SearchDisplay[];
 
     ngOnInit() {
-        this.generateSrc();
+        this.icon = 'image_search';
+
+        this.http.get<SearchDisplay[]>('/api/picture/search').subscribe(result => this.searches = result, (error: HttpErrorResponse) => this.errorHandler.handleError(error));
     }
 
-    public generateSrc(): void {
-        this.src = this.image.api + this.image.message +
-          '?size=' + this.image.fontsize +
-          '&ts=' + Date.now();
-    }
-}
+    fileSelected(files: FileList) {
+        this.icon = 'cached';
+        this.clicked = true;
+        for (let i = 0; i < files.length; i++) {
+            const formData = new FormData();
+            formData.append('file', files[i]);
 
-class CatImage {
-    message: string;
-    api: string;
-    fontsize: number;
+            this.http.post('/api/picture/search', formData).subscribe(() => {
+                location.reload();
+            }, (error: HttpErrorResponse) => this.errorHandler.handleError(error));
+        }
+    }
+
+    transferDataSuccess(param: any) {
+        const dataTransfer: DataTransfer = param.mouseEvent.dataTransfer;
+        if (dataTransfer && dataTransfer.files) {
+            const files: FileList = dataTransfer.files;
+            this.icon = 'cached';
+            this.clicked = true;
+            for (let i = 0; i < files.length; i++) {
+                const formData = new FormData();
+                formData.append('file', files[i]);
+
+                this.http.post('/api/picture/search', formData).subscribe(() => {
+                    location.reload();
+                }, (error: HttpErrorResponse) => this.errorHandler.handleError(error));
+            }
+        }
+    }
+
+    getEmotionEmoji(emotion: string) {
+        switch (emotion) {
+            case 'anger':
+                return '😡';
+            case 'contempt':
+                return '🙄';
+            case 'disgust':
+                return '🤢';
+            case 'fear':
+                return '😨';
+            case 'happiness':
+                return '😁';
+            case 'neutral':
+                return '😐';
+            case 'sadness':
+                return '😭';
+            case 'surprise':
+                return '😲';
+        }
+    }
 }

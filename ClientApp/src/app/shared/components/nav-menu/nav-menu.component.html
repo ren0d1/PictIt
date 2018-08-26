@@ -27,9 +27,6 @@
                     <span>{{ availableLanguagesInformations.get(languageCode).languageName }}</span>
                 </button>
             </mat-menu>
-            <button *ngIf="!oauthService.hasValidIdToken()" mat-icon-button (click)="register()">
-                <mat-icon>person_add</mat-icon>
-            </button>
             <button *ngIf="oauthService.hasValidIdToken()" mat-icon-button (click)="logout()">
                 <mat-icon style="color: yellowgreen">settings_power</mat-icon>
             </button>

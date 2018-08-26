@@ -3,7 +3,6 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI.Pages.Account.Internal;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
 
@@ -26,7 +25,7 @@
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
-            return Ok();
+            return Redirect("home");
         }
     }
 }
