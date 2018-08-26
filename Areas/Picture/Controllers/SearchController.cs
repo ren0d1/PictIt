@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Net.Http;
     using System.Net.Http.Formatting;
@@ -268,6 +269,86 @@
                                                 if (answer.IndexOf("running", StringComparison.Ordinal) == -1)
                                                 {
                                                     await client.PostAsync("https://westeurope.api.cognitive.microsoft.com/face/v1.0/largepersongroups/pictit_users/train", null);
+
+                                                    // Try custom CNN
+                                                    try
+                                                    {
+                                                        byte[] bytes;
+                                                        using (var memoryStream = new MemoryStream())
+                                                        {
+                                                            stream = file.OpenReadStream();
+                                                            stream.CopyTo(memoryStream);
+                                                            bytes = memoryStream.ToArray();
+                                                        }
+
+                                                        string base64 = Convert.ToBase64String(bytes);
+                                                        var imgRequest = new { image = base64 };
+                                                        var resultFromCustomCNN = await client.PostAsync("http://localhost:5002/predict", new StringContent(JsonConvert.SerializeObject(imgRequest), Encoding.UTF8, "application/json"));
+                                                        if (resultFromCustomCNN.IsSuccessStatusCode)
+                                                        {
+                                                            var people = await resultFromCustomCNN.Content.ReadAsAsync<List<string>>();
+                                                            decimal highestConfidence = 0;
+                                                            string matchingPerson = string.Empty;
+
+                                                            foreach (var person in people)
+                                                            {
+                                                                string personName = person.Substring(0, person.IndexOf(':') - 1);
+                                                                decimal personConfidence = Convert.ToDecimal(person.Substring(person.IndexOf(':') + 2, person.Length - person.IndexOf(':') - 2));
+                                                                if (personConfidence > highestConfidence)
+                                                                {
+                                                                    highestConfidence = personConfidence;
+                                                                    matchingPerson = personName;
+                                                                }
+                                                            }
+
+                                                            Guid matchingUserId;
+
+                                                            if (matchingPerson.Contains("Alexandre"))
+                                                                matchingUserId = Guid.Parse("f3711199-3eaa-44a2-2f30-08d60b5b7cbf");
+                                                            else if (matchingPerson.Contains("Danielle"))
+                                                                matchingUserId = Guid.Parse("f3711199-3eaa-44a2-2f30-08d60b5b7cbf");
+                                                            else if (matchingPerson.Contains("Joachim"))
+                                                                matchingUserId = Guid.Parse("f3711199-3eaa-44a2-2f30-08d60b5b7cbf");
+                                                            else if (matchingPerson.Contains("Gian-luca"))
+                                                                matchingUserId = Guid.Parse("f3711199-3eaa-44a2-2f30-08d60b5b7cbf");
+                                                            else
+                                                                matchingUserId = Guid.Parse("81919b28-63ee-449c-8851-08d60ad2c6e6");
+
+                                                            var extraPicture = new Picture
+                                                            {
+                                                                UserId = matchingUserId,
+                                                                Face = faces.First(),
+                                                                Extension = MimeTypeMap.GetExtension(file.ContentType)
+                                                            };
+
+                                                            bool extraPictureInsertionSucceeded = await _pictureRepository.Insert(extraPicture);
+
+                                                            if (extraPictureInsertionSucceeded)
+                                                            {
+                                                                await _pictureRepository.Save();
+
+                                                                var extraSearch = new Search
+                                                                {
+                                                                    UserId = user.Id,
+                                                                    PictureId = extraPicture.Id,
+                                                                    Date = DateTime.Now
+                                                                };
+
+                                                                bool extraSearchInsertionSucceeded = await _searchRepository.Insert(extraSearch);
+                                                                if (extraSearchInsertionSucceeded)
+                                                                {
+                                                                    var extraFileName = picture.Id + MimeTypeMap.GetExtension(file.ContentType);
+                                                                    System.Console.WriteLine(extraFileName);
+                                                                    var extraCloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(extraFileName);
+                                                                    await extraCloudBlockBlob.UploadFromStreamAsync(file.OpenReadStream());
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    catch (Exception e)
+                                                    {
+                                                        Console.WriteLine(e.Message);
+                                                    }
                                                 }
                                             }
                                         }
