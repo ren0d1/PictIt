@@ -90,7 +90,7 @@
                             options.Events.RaiseFailureEvents = true;
                             options.Events.RaiseSuccessEvents = true;
                             options.UserInteraction.LoginUrl = "/login";
-                            options.UserInteraction.LogoutUrl = "/logout";
+                            options.UserInteraction.LogoutUrl = "/api/user/logout";
                         })
                 .AddAspNetIdentity<User>()
                 .AddDeveloperSigningCredential()

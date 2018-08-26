@@ -3,72 +3,80 @@
     <div class="circle"></div>
     <p>{{registered ? 'Uploading pictures' : 'Registration in progress'}}</p>
   </div>
-  <form id="RegistrationForm" name="RegistrationForm" [formGroup]="registrationForm" autocomplete="on" (ngSubmit)="onSubmit()" *ngIf="!sent">
-    <fieldset id="userIdentity" name="userIdentity" form="RegistrationForm">
-      <mat-form-field>
-        <input matInput type="text" form="RegistrationForm" name="FirstName" placeholder="First name" [formControl]="firstNameFormControl" autocomplete="given-name" maxlength="50">
-        <mat-error *ngIf="firstNameFormControl.hasError('pattern')">
-          Please enter a valid first name
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput type="text" form="RegistrationForm" name="LastName" placeholder="Last name" [formControl]="lastNameFormControl" autocomplete="family-name" maxlength="50">
-        <mat-error *ngIf="lastNameFormControl.hasError('pattern')">
-          Please enter a valid last name
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput type="text" form="RegistrationForm" name="UserName" placeholder="Username" [formControl]="userNameFormControl" autocomplete="username" maxlength="50">
-        <mat-error *ngIf="userNameFormControl.hasError('pattern')">
-          Please enter a valid username
-        </mat-error>
-      </mat-form-field>
+  <form class="registrationForm" id="RegistrationForm" name="RegistrationForm" [formGroup]="registrationForm" autocomplete="on" (ngSubmit)="onSubmit()" *ngIf="!sent">
+    <article>
+      <fieldset class="identityGroup" [class.identityError]="registrationForm.hasError('missingIdentity')" id="userIdentity" name="userIdentity" form="RegistrationForm">
+        <mat-form-field>
+          <input matInput type="text" form="RegistrationForm" name="FirstName" placeholder="First name" [formControl]="firstNameFormControl" autocomplete="given-name" maxlength="50">
+          <mat-error *ngIf="firstNameFormControl.hasError('pattern')">
+            Please enter a valid first name
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="text" form="RegistrationForm" name="LastName" placeholder="Last name" [formControl]="lastNameFormControl" autocomplete="family-name" maxlength="50">
+          <mat-error *ngIf="lastNameFormControl.hasError('pattern')">
+            Please enter a valid last name
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="text" form="RegistrationForm" name="UserName" placeholder="Username" [formControl]="userNameFormControl" autocomplete="username" maxlength="50">
+          <mat-error *ngIf="userNameFormControl.hasError('pattern')">
+            Please enter a valid username
+          </mat-error>
+        </mat-form-field>
+      </fieldset>
       <mat-error *ngIf="registrationForm.hasError('missingIdentity')">
         You need to give either your <strong>first name and last name</strong> or a <strong>username</strong>
       </mat-error>
-    </fieldset>
-    <mat-form-field>
-      <input matInput type="email" form="RegistrationForm" name="Email" placeholder="Email *" [formControl]="emailFormControl" autocomplete="email" maxlength="255">
-      <mat-error *ngIf="emailFormControl.hasError('emailUnreachable') && !emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
-        Please enter a reachable email address
-      </mat-error>
-      <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
-        Please enter a valid email address
-      </mat-error>
-      <mat-error *ngIf="emailFormControl.hasError('required')">
-        Email address is <strong>required</strong>
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput [type]="showPassword ? 'text' : 'password'" form="RegistrationForm" name="Password" placeholder="Password *" [formControl]="passwordFormControl" autocomplete="new-password">
-      <mat-icon matSuffix (click)="showPassword = !showPassword">{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-      <mat-error *ngIf="passwordFormControl.hasError('pattern') && !passwordFormControl.hasError('required') && !passwordFormControl.hasError('minLength')">
-        Please enter a valid password (At least 1 lower char, 1 upper char, 1 digit and 1 special char)
-      </mat-error>
-      <mat-error *ngIf="passwordFormControl.hasError('minLength') && !passwordFormControl.hasError('required')">
-        Password needs to be at least 8 characters long
-      </mat-error>
-      <mat-error *ngIf="passwordFormControl.hasError('required')">
-        Password is <strong>required</strong>
-      </mat-error>
-    </mat-form-field>
-    <mat-checkbox form="RegistrationForm" name="AcceptTerms" [formControl]="termsAndConditionsFormControl">I accept the <strong>terms</strong> and <strong>conditions</strong>.</mat-checkbox>
-    <mat-error *ngIf="picturesFormControl.hasError('notEnough')">
-        You need to provide at least <strong>5</strong> pictures.
-    </mat-error>
-    <mat-error *ngIf="improperFace">
-        We either <strong>could not detect</strong> a face or we <strong>detected too many</strong> faces in one or more of the pictures you chose.
-    </mat-error>
-    <div class="dropzone" dnd-droppable (onDropSuccess)="transferDataSuccess($event)" (click)="Files.click()">
-      <mat-card *ngFor="let picture of pictures" [hidden]="uploadingPicture">
-        <button mat-mini-fab color="warn" class="discard-picture" (click)="deletePicture(picture); $event.stopPropagation()">x</button>
-        <picture class="picture">
-          <img mat-card-image [src]="picture.src">
-        </picture>
-      </mat-card>
-      <mat-progress-spinner *ngIf="uploadingPicture" [color]="primary" mode="indeterminate"></mat-progress-spinner>
-      <input type="file" form="RegistrationForm" id="files" name="files" accept="image/*" #Files multiple (change)="fileSelected(Files.files)" [formControl]="picturesFormControl" style="display:none" />
-    </div>
-    <button mat-raised-button type="submit" color="primary" form="RegistrationForm" name="Register" value="Register" [disabled]="!registrationForm.valid">Register</button>
+      <mat-form-field>
+        <input matInput type="email" form="RegistrationForm" name="Email" placeholder="Email *" [formControl]="emailFormControl" autocomplete="email" maxlength="255">
+        <mat-error *ngIf="emailFormControl.hasError('emailUnreachable') && !emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+          Please enter a reachable email address
+        </mat-error>
+        <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="emailFormControl.hasError('required')">
+          Email address is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput [type]="showPassword ? 'text' : 'password'" form="RegistrationForm" name="Password" placeholder="Password *" [formControl]="passwordFormControl" autocomplete="new-password">
+        <mat-icon matSuffix (click)="showPassword = !showPassword">{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngIf="passwordFormControl.hasError('pattern') && !passwordFormControl.hasError('required') && !passwordFormControl.hasError('minLength')">
+          Please enter a valid password (At least 1 lower char, 1 upper char, 1 digit and 1 special char)
+        </mat-error>
+        <mat-error *ngIf="passwordFormControl.hasError('minLength') && !passwordFormControl.hasError('required')">
+          Password needs to be at least 8 characters long
+        </mat-error>
+        <mat-error *ngIf="passwordFormControl.hasError('required')">
+          Password is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-checkbox form="RegistrationForm" name="AcceptTerms" [formControl]="termsAndConditionsFormControl">I accept the <strong>terms</strong> and <strong>conditions</strong>.</mat-checkbox>
+      <button mat-raised-button type="submit" color="primary" form="RegistrationForm" name="Register" value="Register" [disabled]="!registrationForm.valid">Register</button>
+    </article>
+    <article>
+      <div class="dropzone" [class.centerDropzone]="uploadingPicture" dnd-droppable (onDropSuccess)="transferDataSuccess($event)" (click)="Files.click()">
+          <mat-error *ngIf="picturesFormControl.hasError('notEnough') && !uploadingPicture">
+              You need to provide at least <strong>5</strong> pictures.
+          </mat-error>
+          <mat-error *ngIf="improperFace && !uploadingPicture">
+              We either <strong>could not detect</strong> a face or we <strong>detected too many</strong> faces in one or more of the pictures you chose.
+          </mat-error>
+          <ul *ngIf="!uploadingPicture">
+            <li *ngFor="let picture of pictures">
+              <mat-card>
+                <button mat-mini-fab color="warn" class="discard-picture" (click)="deletePicture(picture); $event.stopPropagation()">x</button>
+                <picture class="picture">
+                  <img mat-card-image [src]="picture.src">
+                </picture>
+              </mat-card>
+            </li>
+          </ul>
+          <mat-progress-spinner *ngIf="uploadingPicture" [color]="primary" mode="indeterminate"></mat-progress-spinner>
+          <input type="file" form="RegistrationForm" id="files" name="files" accept="image/*" #Files multiple (change)="fileSelected(Files.files)" [formControl]="picturesFormControl" style="display:none" />
+        </div>
+    </article>
   </form>
 </main>

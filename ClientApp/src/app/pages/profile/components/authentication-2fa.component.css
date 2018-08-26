@@ -1,0 +1,14 @@
+.mat-card a, .mat-card a:link, .mat-card a:visited {
+    color: #ffd740;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.mat-card > a {
+    margin: 1rem;
+}
+
+.mat-card a:hover, .mat-card a:active {
+    color: #673ab7;
+    text-decoration: underline;
+}

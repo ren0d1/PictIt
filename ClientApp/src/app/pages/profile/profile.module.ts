@@ -8,6 +8,7 @@ import { ProfileComponent } from './profile.component';
 import { Authentication2faComponent } from './components/authentication-2fa.component';
 import { AuthenticatorComponent } from './components/authenticator.component';
 import { ShowCodesComponent } from './components/show-codes.component';
+import { DeleteAccountComponent } from './components/delete-account.component';
 import { ProfileRouting } from './profile.routes';
 
 @NgModule({
@@ -15,7 +16,8 @@ import { ProfileRouting } from './profile.routes';
     ProfileComponent,
     Authentication2faComponent,
     AuthenticatorComponent,
-    ShowCodesComponent
+    ShowCodesComponent,
+    DeleteAccountComponent
   ],
   imports: [
     BrowserAnimationsModule,

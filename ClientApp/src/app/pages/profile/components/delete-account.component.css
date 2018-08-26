@@ -6,15 +6,17 @@ main {
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
-.consentForm{
+.deleteAccountForm {
+    width: 100%;
     display: flex;
     flex-flow: column nowrap;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
 }
 
-.mat-slide-toggle, .mat-checkbox, .mat-raised-button {
-    margin: 1rem;
+.mat-form-field { 
+    width: 50%;
 }

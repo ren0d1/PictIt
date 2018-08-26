@@ -25,7 +25,7 @@
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
-            return Ok();
+            return Redirect("home");
         }
     }
 }

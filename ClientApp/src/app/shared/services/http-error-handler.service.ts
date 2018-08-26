@@ -7,10 +7,10 @@ import { Router } from '@angular/router';
     providedIn: 'root',
 })
 export class HttpErrorHandlerService {
-  constructor(private router: Router){}
+  constructor(private router: Router) {}
 
   handleError(error: HttpErrorResponse) {
-    switch(error.status){
+    switch (error.status) {
       case 209:
         window.location.href = window.location.origin + error.error.text;
         break;
@@ -29,10 +29,10 @@ export class HttpErrorHandlerService {
     }
   }
 
-  handleFormError(error: HttpErrorResponse, formControl: FormControl){
+  handleFormError(error: HttpErrorResponse, formControl: FormControl) {
     if (error.status === 422) {
       formControl.setErrors({wrongcode: true});
-    }else{
+    } else {
       this.handleError(error);
     }
   }

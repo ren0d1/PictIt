@@ -3,7 +3,7 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 
 import { ActivatedRoute } from '@angular/router';
 import { HttpErrorHandlerService } from '../../../shared/services/http-error-handler.service';
-import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login-2fa',
@@ -19,13 +19,16 @@ export class Login2faComponent implements OnInit {
     Validators.maxLength(8)
   ]);
 
+  rememberMachineFormControl = new FormControl('', []);
+
   login2faForm: FormGroup;
   sent = false;
   returnUrl = '';
 
   ngOnInit() {
     this.login2faForm = new FormGroup ({
-      emailFormControl: this.twoFactorCodeFormControl
+      twoFactorCodeFormControl: this.twoFactorCodeFormControl,
+      rememberMachineFormControl: this.rememberMachineFormControl
     });
 
     this.activeRoute.queryParams.subscribe(params => {
@@ -36,7 +39,7 @@ export class Login2faComponent implements OnInit {
   sendForm() {
     this.sent = true;
     if (this.login2faForm.valid) {
-      this.http.post('/api/user/Login2fa', {'TwoFactorCode': this.twoFactorCodeFormControl.value}, { params : new HttpParams().set('returnUrl', this.returnUrl)}).subscribe(() => {}, (error: HttpErrorResponse) => {
+      this.http.post('/api/user/Login2fa', {'TwoFactorCode': this.twoFactorCodeFormControl.value, 'returnUrl': this.returnUrl, 'rememberMachine': this.rememberMachineFormControl.value}).subscribe(() => {}, (error: HttpErrorResponse) => {
         this.errorHandler.handleFormError(error, this.twoFactorCodeFormControl);
         this.sent = false;
       });

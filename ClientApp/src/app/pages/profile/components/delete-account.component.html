@@ -1,0 +1,25 @@
+<main>
+    <p>
+        <mat-icon>warning</mat-icon>
+        <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
+    </p>
+    <form class="deleteAccountForm" [hidden]="sent" id="DeleteAccountForm" name="DeleteAccountForm" [formGroup]="deleteAccountForm" autocomplete="on" (submit)="sendForm()">
+        <mat-form-field>
+            <input matInput [type]="showPassword ? 'text' : 'password'" form="DeleteAccountForm" name="Password" placeholder="Password *" [formControl]="passwordFormControl" autocomplete="old-password">
+            <mat-icon matSuffix (click)="showPassword = !showPassword">{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <mat-error *ngIf="passwordFormControl.hasError('pattern') && !passwordFormControl.hasError('required') && !passwordFormControl.hasError('minLength')">
+                Please enter a valid password (At least 1 lower char, 1 upper char, 1 digit and 1 special char)
+            </mat-error>
+            <mat-error *ngIf="passwordFormControl.hasError('minLength') && !passwordFormControl.hasError('required')">
+                Password needs to be at least 8 characters long
+            </mat-error>
+            <mat-error *ngIf="passwordFormControl.hasError('required')">
+                Password is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="passwordFormControl.hasError('wrongcode')">
+                Password did <strong>not</strong> work
+            </mat-error>
+        </mat-form-field>
+        <button mat-raised-button type="submit" color="primary" form="DeleteAccountForm" [disabled]="!deleteAccountForm.valid">Reset</button>
+    </form>
+</main>

@@ -20,12 +20,11 @@ export class LogoutComponent implements OnInit {
     });
 
     this.http.get('/api/user/logout').subscribe(() => {
-      if(this.returnUrl === undefined || this.returnUrl.length > 0)
-      {
+      if (this.returnUrl === undefined || this.returnUrl.length > 0) {
         this.router.navigateByUrl(this.returnUrl);
-      }else{
+      } else {
         this.router.navigateByUrl('home');
       }
-    }, (error: HttpErrorResponse) => this.errorHandler.handleError(error))
+    }, (error: HttpErrorResponse) => this.errorHandler.handleError(error));
   }
 }

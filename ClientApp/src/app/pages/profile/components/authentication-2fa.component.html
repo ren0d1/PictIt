@@ -15,4 +15,8 @@
         <a *ngIf="authentication2faInformation.hasAuthenticator" [routerLink]="['/authenticator']">Setup authenticator app</a>
         <a *ngIf="authentication2faInformation.hasAuthenticator" (click)="resetAuthenticator()">Reset authenticator app</a>
     </mat-card>
+    <mat-card color="primary">
+        <a (click)="downloadPersonalData()">Download personal data</a>
+        <a (click)="deleteAccount()">Permanently delete account</a>
+    </mat-card>
 </main>

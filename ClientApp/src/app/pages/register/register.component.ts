@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import * as XRegExp from 'xregexp';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, AfterViewInit {
   constructor(private http: HttpClient, private errorHandler: HttpErrorHandlerService, private router: Router) { }
 
   registrationForm: FormGroup;
@@ -95,13 +95,13 @@ export class RegisterComponent implements OnInit {
         this.http.post('api/user/register', userToRegister).subscribe((userId: string) => {
           this.registered = true;
 
-          let formData = new FormData();
+          const formData = new FormData();
           formData.append('userId', userId);
-          for(let i = 0; i < this.pictures.length; i++){
+          for (let i = 0; i < this.pictures.length; i++) {
             formData.append('files', this.pictures[i].file);
           }
 
-          this.http.post('api/user/picture', formData).subscribe((userId: string) => {
+          this.http.post('api/user/picture', formData).subscribe(() => {
             this.router.navigate(['confirm-email']);
           }, (error: HttpErrorResponse) => {
             this.errorHandler.handleError(error);
@@ -133,9 +133,9 @@ export class RegisterComponent implements OnInit {
     }, (error: HttpErrorResponse) => this.errorHandler.handleError(error));
   }
 
-  fileSelected(files: FileList){
+  fileSelected(files: FileList) {
     this.uploadingPicture = true;
-    for(let i = 0; i < files.length; i++){
+    for (let i = 0; i < files.length; i++) {
       this.checkIfFaceIsPresent(files[i], () => {
         this.pictures.push(new Picture(files[i], '', true));
         this.getImageSrc(files[i], this.pictures[this.pictures.length - 1]);
@@ -145,11 +145,11 @@ export class RegisterComponent implements OnInit {
   }
 
   transferDataSuccess(param: any) {
-    let dataTransfer: DataTransfer = param.mouseEvent.dataTransfer;
-    if (dataTransfer && dataTransfer.files) { 
-      let files: FileList = dataTransfer.files;
+    const dataTransfer: DataTransfer = param.mouseEvent.dataTransfer;
+    if (dataTransfer && dataTransfer.files) {
+      const files: FileList = dataTransfer.files;
       this.uploadingPicture = true;
-      for(let i = 0; i < files.length; i++){
+      for (let i = 0; i < files.length; i++) {
         this.checkIfFaceIsPresent(files[i], () => {
           this.pictures.push(new Picture(files[i], '', true));
           this.getImageSrc(files[i], this.pictures[this.pictures.length - 1]);
@@ -159,34 +159,44 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  checkIfFaceIsPresent(file: File, callback: Function){
-    let formData = new FormData();
+  checkIfFaceIsPresent(file: File, callback: Function) {
+    const formData = new FormData();
     formData.append('file', file);
 
     return this.http.post('api/picture/isAFace', formData).subscribe((isAFace: boolean) => {
-      if(isAFace)
-      {
+      if (isAFace) {
         callback();
       } else {
         this.improperFace = true;
+
+        let countSrc = 0;
+        for (let i = 0; i < this.pictures.length; i++) {
+          if (this.pictures[i].src.length > 0) {
+            countSrc++;
+          }
+        }
+
+        if (countSrc === this.pictures.length) {
+          this.uploadingPicture = false;
+        }
       }
     });
   }
 
-  getImageSrc(file: File, picture: Picture){
-    var fr = new FileReader();
+  getImageSrc(file: File, picture: Picture) {
+    const fr = new FileReader();
 
     fr.onload = (event) => {
       picture.src = event.target.result;
 
       let countSrc = 0;
-      for(let i = 0; i < this.pictures.length; i++){
-        if(this.pictures[i].src.length > 0){
+      for (let i = 0; i < this.pictures.length; i++) {
+        if (this.pictures[i].src.length > 0) {
           countSrc++;
         }
       }
 
-      if(countSrc === this.pictures.length){
+      if (countSrc === this.pictures.length) {
         this.uploadingPicture = false;
       }
     };
@@ -194,7 +204,7 @@ export class RegisterComponent implements OnInit {
     fr.readAsDataURL(file);
   }
 
-  deletePicture(picture: Picture){
+  deletePicture(picture: Picture) {
     this.pictures.splice(this.pictures.indexOf(picture), 1);
     this.picturesFormControl.setErrors(this.pictures.length < 5 ? { notEnough: true } : null);
     this.improperFace = false;

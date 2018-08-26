@@ -8,7 +8,6 @@ import { LoggerService } from '../../services/logger.service';
 import { LanguagesMatcherService } from '../../services/languages-matcher.service';
 import { HashTable } from 'angular-hashtable';
 import { Language } from '../../models/language.model';
-import { Router } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
@@ -31,7 +30,6 @@ export class NavMenuComponent {
         public translate: TranslateService,
         private _logger: LoggerService,
         _languagesMatcher: LanguagesMatcherService,
-        private router: Router,
         public oauthService: OAuthService) {
         const userBrowserLang = translate.getBrowserLang();
         this.availableLanguagesCode = translate.getLangs();
@@ -77,13 +75,6 @@ export class NavMenuComponent {
         this._logger.logDebug('Do logout logic');
         if (this.oauthService.hasValidIdToken()) {
             this.oauthService.logOut();
-        }
-    }
-
-    public register() {
-        this._logger.logDebug('Do register logic');
-        if (!this.oauthService.hasValidIdToken()) {
-            this.router.navigate(['register']);
         }
     }
 
