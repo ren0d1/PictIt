@@ -29,6 +29,8 @@
     {
         public Guid PictureId { get; set; }
 
+        public string Extension { get; set; }
+
         public string UserName { get; set; }
 
         public string Gender { get; set; }
@@ -151,6 +153,7 @@
                 var searchDisplay = new SearchDisplay
                                         {
                                             PictureId = picture.Id,
+                                            Extension = picture.Extension,
                                             UserName = username,
                                             Age = picture.Face.FaceAttributes.Age,
                                             Gender = picture.Face.FaceAttributes.Gender,
@@ -226,7 +229,8 @@
                                     var picture = new Picture
                                                       {
                                                           UserId = matchingUser.Id, 
-                                                          Face = faces.First()
+                                                          Face = faces.First(),
+                                                          Extension = MimeTypeMap.GetExtension(file.ContentType)
                                                       };
 
                                     bool pictureInsertionSucceeded = await _pictureRepository.Insert(picture);

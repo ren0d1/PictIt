@@ -9,5 +9,7 @@
         public Guid UserId { get; set; }
 
         public Face Face { get; set; }
+
+        public string Extension { get; set; }
     }
 }

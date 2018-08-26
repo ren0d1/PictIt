@@ -10,7 +10,7 @@ import { SearchDisplay } from '../../shared/models/search-display.model';
 })
 
 export class GalleryComponent implements OnInit {
-    constructor(private http: HttpClient, private errorHandler: HttpErrorHandlerService){}
+    constructor(private http: HttpClient, private errorHandler: HttpErrorHandlerService) {}
 
     icon: string;
     clicked: boolean;
@@ -18,34 +18,59 @@ export class GalleryComponent implements OnInit {
     searches: SearchDisplay[];
 
     ngOnInit() {
-        this.icon = "image_search";
+        this.icon = 'image_search';
 
         this.http.get<SearchDisplay[]>('/api/picture/search').subscribe(result => this.searches = result, (error: HttpErrorResponse) => this.errorHandler.handleError(error));
     }
 
     fileSelected(files: FileList) {
-        this.icon = "cached";
+        this.icon = 'cached';
         this.clicked = true;
-        for(let i = 0; i < files.length; i++){
-            let formData = new FormData();
+        for (let i = 0; i < files.length; i++) {
+            const formData = new FormData();
             formData.append('file', files[i]);
 
-            this.http.post('/api/picture/search', formData).subscribe(() => {}, (error: HttpErrorResponse) => this.errorHandler.handleError(error));
+            this.http.post('/api/picture/search', formData).subscribe(() => {
+                location.reload();
+            }, (error: HttpErrorResponse) => this.errorHandler.handleError(error));
         }
     }
 
     transferDataSuccess(param: any) {
-        let dataTransfer: DataTransfer = param.mouseEvent.dataTransfer;
-        if (dataTransfer && dataTransfer.files) { 
-            let files: FileList = dataTransfer.files;
-            this.icon = "cached";
+        const dataTransfer: DataTransfer = param.mouseEvent.dataTransfer;
+        if (dataTransfer && dataTransfer.files) {
+            const files: FileList = dataTransfer.files;
+            this.icon = 'cached';
             this.clicked = true;
-            for(let i = 0; i < files.length; i++){
-                let formData = new FormData();
+            for (let i = 0; i < files.length; i++) {
+                const formData = new FormData();
                 formData.append('file', files[i]);
-    
-                this.http.post('/api/picture/search', formData).subscribe(() => {}, (error: HttpErrorResponse) => this.errorHandler.handleError(error));
+
+                this.http.post('/api/picture/search', formData).subscribe(() => {
+                    location.reload();
+                }, (error: HttpErrorResponse) => this.errorHandler.handleError(error));
             }
+        }
+    }
+
+    getEmotionEmoji(emotion: string) {
+        switch (emotion) {
+            case 'anger':
+                return '😡';
+            case 'contempt':
+                return '🙄';
+            case 'disgust':
+                return '🤢';
+            case 'fear':
+                return '😨';
+            case 'happiness':
+                return '😁';
+            case 'neutral':
+                return '😐';
+            case 'sadness':
+                return '😭';
+            case 'surprise':
+                return '😲';
         }
     }
 }

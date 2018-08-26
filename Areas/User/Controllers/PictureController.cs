@@ -100,7 +100,8 @@
                                     var picture = new Picture
                                     {
                                         UserId = Guid.Parse(userId),
-                                        Face = faces.First()
+                                        Face = faces.First(),
+                                        Extension = MimeTypeMap.GetExtension(file.ContentType)
                                     };
 
                                     bool succeeded = await _pictureRepository.Insert(picture);
