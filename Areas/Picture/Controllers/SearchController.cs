@@ -306,11 +306,11 @@
                                                             if (matchingPerson.Contains("Alexandre"))
                                                                 matchingUserId = Guid.Parse("f3711199-3eaa-44a2-2f30-08d60b5b7cbf");
                                                             else if (matchingPerson.Contains("Danielle"))
-                                                                matchingUserId = Guid.Parse("f3711199-3eaa-44a2-2f30-08d60b5b7cbf");
+                                                                matchingUserId = Guid.Parse("e02ca51d-9357-4f79-a337-08d60b93a736");
                                                             else if (matchingPerson.Contains("Joachim"))
-                                                                matchingUserId = Guid.Parse("f3711199-3eaa-44a2-2f30-08d60b5b7cbf");
+                                                                matchingUserId = Guid.Parse("f20f6dd8-7432-4510-4df1-08d60b9cd4dd");
                                                             else if (matchingPerson.Contains("Gian-luca"))
-                                                                matchingUserId = Guid.Parse("f3711199-3eaa-44a2-2f30-08d60b5b7cbf");
+                                                                matchingUserId = Guid.Parse("20c9e863-b3f7-415f-4df2-08d60b9cd4dd");
                                                             else
                                                                 matchingUserId = Guid.Parse("81919b28-63ee-449c-8851-08d60ad2c6e6");
 
@@ -337,6 +337,7 @@
                                                                 bool extraSearchInsertionSucceeded = await _searchRepository.Insert(extraSearch);
                                                                 if (extraSearchInsertionSucceeded)
                                                                 {
+                                                                    await _searchRepository.Save();
                                                                     var extraFileName = picture.Id + MimeTypeMap.GetExtension(file.ContentType);
                                                                     System.Console.WriteLine(extraFileName);
                                                                     var extraCloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(extraFileName);
