@@ -22,6 +22,7 @@
         }
 
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> SetNewPassword([FromBody] ResetPasswordUser resetPasswordUser)
         {
             var user = await _userManager.FindByEmailAsync(resetPasswordUser.Email);

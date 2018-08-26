@@ -1,23 +1,10 @@
-<mat-sidenav-container class="nav-menu" color="primary" (backdropClick)="closeMenu(sidenav)">
-    <mat-sidenav #sidenav 
-    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'"
-    [opened]="!(isHandset$ | async)"
-    (keydown.escape)="closeMenu(sidenav)"
-    disableClose>
-        <mat-nav-list>
-            <a mat-list-item [routerLink]="['/']" (click)="closeMenu(sidenav)">Home</a>
-            <a mat-list-item [routerLink]="['/gallery']" (click)="closeMenu(sidenav)">Gallery</a>
-            <a mat-list-item [routerLink]="['/profile']" (click)="closeMenu(sidenav)">Profile</a>
-        </mat-nav-list>
-    </mat-sidenav>
-    
+<mat-sidenav-container class="nav-menu" color="primary">
     <mat-sidenav-content>
         <mat-toolbar color="primary">
-            <button mat-icon-button *ngIf="isHandset$ | async" style="margin-right: 1vw" (click)="sidenav.open()">
-                <mat-icon>menu</mat-icon>
+            <button mat-raised-button (click)="home()">
+                <mat-icon>home</mat-icon>
+                PictIt
             </button>
-            {{ appName }}   
             <button mat-icon-button style="margin-left: auto" [matMenuTriggerFor]="languagesMenu">
                 <mat-icon>translate</mat-icon>
             </button>
@@ -27,6 +14,9 @@
                     <span>{{ availableLanguagesInformations.get(languageCode).languageName }}</span>
                 </button>
             </mat-menu>
+            <button *ngIf="oauthService.hasValidIdToken()" mat-icon-button (click)="profile()">
+                <mat-icon>account_circle</mat-icon>
+            </button>
             <button *ngIf="oauthService.hasValidIdToken()" mat-icon-button (click)="logout()">
                 <mat-icon style="color: yellowgreen">settings_power</mat-icon>
             </button>

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { MatSidenav } from '@angular/material';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -9,6 +8,7 @@ import { LanguagesMatcherService } from '../../services/languages-matcher.servic
 import { HashTable } from 'angular-hashtable';
 import { Language } from '../../models/language.model';
 import { OAuthService } from 'angular-oauth2-oidc';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav-menu',
@@ -30,7 +30,8 @@ export class NavMenuComponent {
         public translate: TranslateService,
         private _logger: LoggerService,
         _languagesMatcher: LanguagesMatcherService,
-        public oauthService: OAuthService) {
+        public oauthService: OAuthService,
+        private router: Router) {
         const userBrowserLang = translate.getBrowserLang();
         this.availableLanguagesCode = translate.getLangs();
 
@@ -60,6 +61,14 @@ export class NavMenuComponent {
         translate.get('NAV-MENU.NAME', {value: 'X'}).subscribe((res: string) => this.appName = res);
     }
 
+    public home() {
+        if (this.oauthService.hasValidIdToken()) {
+            this.router.navigate(['gallery']);
+        } else {
+            this.router.navigate(['home']);
+        }
+    }
+
     public setLanguage(lang) {
         this.translate.use(lang);
     }
@@ -78,11 +87,7 @@ export class NavMenuComponent {
         }
     }
 
-    public closeMenu(menu: MatSidenav) {
-        this.isHandset$.subscribe(isHandset => {
-            if (isHandset) {
-                menu.close();
-            }
-        });
+    public profile() {
+        this.router.navigate(['profile']);
     }
 }

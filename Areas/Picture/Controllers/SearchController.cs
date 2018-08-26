@@ -100,7 +100,7 @@
                     username = pictureUser.FirstName + " " + pictureUser.LastName;
 
                 decimal highestEmotion = 0;
-                string emotion = "";
+                string emotion = string.Empty;
 
                 if (picture.Face.FaceAttributes.Emotion.Anger > highestEmotion)
                 {

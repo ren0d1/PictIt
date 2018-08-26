@@ -7,10 +7,11 @@
     right: 0;
 }
 
-.mat-sidenav{
-    background-color: #673ab7;
-}
-
 .mat-nav-list .mat-list-item{
     color: rgba(255, 255, 255, .87);
+}
+
+.mat-raised-button {
+    font-weight: bold;
+    font-size: 1.15rem;
 }
