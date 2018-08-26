@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
 export class DeleteAccountComponent implements OnInit {
   constructor(private http: HttpClient, private router: Router, private errorHandler: HttpErrorHandlerService) {}
 
+  showPassword = false;
+
   passwordFormControl = new FormControl('', [
     Validators.required,
     Validators.pattern(XRegExp('(?=.*\\pN)(?=.*\\p{Ll})(?=.*\\p{Lu})(?=.*(\\pP|\\pS)).{8,}', 'A')),

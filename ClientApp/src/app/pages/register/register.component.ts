@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import * as XRegExp from 'xregexp';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { RegisterUser } from '../../shared/models/register-user.model';
@@ -14,7 +15,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit, AfterViewInit {
-  constructor(private http: HttpClient, private errorHandler: HttpErrorHandlerService, private router: Router) { }
+  constructor(private http: HttpClient, private errorHandler: HttpErrorHandlerService, private router: Router, public dialog: MatDialog) { }
 
   registrationForm: FormGroup;
 
@@ -133,6 +134,17 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     }, (error: HttpErrorResponse) => this.errorHandler.handleError(error));
   }
 
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DialogTermsComponent, {
+      height: '400px',
+      width: '600px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
   fileSelected(files: FileList) {
     this.uploadingPicture = true;
     for (let i = 0; i < files.length; i++) {
@@ -208,5 +220,37 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     this.pictures.splice(this.pictures.indexOf(picture), 1);
     this.picturesFormControl.setErrors(this.pictures.length < 5 ? { notEnough: true } : null);
     this.improperFace = false;
+  }
+}
+
+@Component({
+  selector: 'app-dialog-terms',
+  template: `
+    <h2>PictIt: terms and conditions</h2>
+    <h3>Datas:</h3>
+    <ul>
+      <li>We ask you to provide either a first and last name or a username in order to provide an identity when you are searched.</li>
+      <li>We ask you to provide an email to log into your account and for extra services such as email validation or password reset.</li>
+      <li>We ask you to provide a <strong>strong</strong> password to log into your account for safety purposes.
+      Moreover, we ensure you that your password is hashed & stored in the most secure way out of 2018.</li>
+      <li>We ask you to provide pictures in order to allow other users to find your through our recognition service.
+      This step is mandatory because our service wants every user to be as able to be found as to find.</li>
+      <li>It is important to note that your information is encrypted at all stage.</li>
+    </ul>
+    <h3>Additionals:</h3>
+    <ul>
+      <li>We require you to have the necessary rights of the different pictures you share with us and to grant us these rights by extension.
+      Those pictures will only be used to provide you our service or to improve it.
+      We keep them private and you will be the only one able to access them.</li>
+      <li>It is important to note that every information you might get from our recognition service may be provided by our users,
+      <strong>but</strong> may also be based an intelligent guess from our algorithm.</li>
+    </ul>
+  `,
+})
+export class DialogTermsComponent {
+  constructor(public dialogRef: MatDialogRef<DialogTermsComponent>) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 }

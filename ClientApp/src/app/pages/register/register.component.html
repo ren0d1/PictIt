@@ -53,7 +53,7 @@
           Password is <strong>required</strong>
         </mat-error>
       </mat-form-field>
-      <mat-checkbox form="RegistrationForm" name="AcceptTerms" [formControl]="termsAndConditionsFormControl">I accept the <strong>terms</strong> and <strong>conditions</strong>.</mat-checkbox>
+      <mat-checkbox form="RegistrationForm" name="AcceptTerms" [formControl]="termsAndConditionsFormControl" (click)="openDialog()">I accept the <strong>terms</strong> and <strong>conditions</strong>.</mat-checkbox>
       <button mat-raised-button type="submit" color="primary" form="RegistrationForm" name="Register" value="Register" [disabled]="!registrationForm.valid">Register</button>
     </article>
     <article>

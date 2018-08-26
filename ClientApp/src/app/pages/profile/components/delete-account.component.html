@@ -3,7 +3,7 @@
         <mat-icon>warning</mat-icon>
         <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
     </p>
-    <form class="deleteAccountForm" [hidden]="sent" id="DeleteAccountForm" name="DeleteAccountForm" [formGroup]="deleteAccountForm" autocomplete="on" (submit)="sendForm()">
+    <form class="deleteAccountForm" id="DeleteAccountForm" name="DeleteAccountForm" [formGroup]="deleteAccountForm" autocomplete="on" (submit)="sendForm()">
         <mat-form-field>
             <input matInput [type]="showPassword ? 'text' : 'password'" form="DeleteAccountForm" name="Password" placeholder="Password *" [formControl]="passwordFormControl" autocomplete="old-password">
             <mat-icon matSuffix (click)="showPassword = !showPassword">{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
