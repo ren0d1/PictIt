@@ -32,7 +32,6 @@
         }
 
         [HttpPost]
-        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Login([FromBody] LoginUser userToLogin)
         {
             var context = await _interaction.GetAuthorizationContextAsync(userToLogin.ReturnUrl);

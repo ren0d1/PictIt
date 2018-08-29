@@ -1,8 +1,6 @@
 ﻿namespace PictIt
 {
     using System;
-    using System.Data.Common;
-    using System.Security.Cryptography.X509Certificates;
 
     using IdentityServer4.EntityFramework.Mappers;
 
@@ -12,14 +10,10 @@
     using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.SpaServices.AngularCli;
-    using Microsoft.Azure.KeyVault;
-    using Microsoft.Azure.Services.AppAuthentication;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Internal;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.IdentityModel.Clients.ActiveDirectory;
-    using Microsoft.Rest;
 
     using PictIt.Models;
     using PictIt.Repositories;
@@ -88,11 +82,11 @@
             services.AddScoped<IPasswordHasher<User>, Argon2PasswordHasher<User>>();
             services.Configure<Argon2PasswordHasherOptions>(options => options.Strength = Argon2HashStrength.Sensitive);
 
-            // Retrieve X509Certificate2
-            var bytes = Convert.FromBase64String(_configuration["x509:IdentityServer"]);
-            var coll = new X509Certificate2Collection();
-            coll.Import(bytes, null, X509KeyStorageFlags.Exportable);
-            var certificate = coll[0];
+            //// Retrieve X509Certificate2
+            //var bytes = Convert.FromBase64String(_configuration["x509:IdentityServer"]);
+            //var coll = new X509Certificate2Collection();
+            //coll.Import(bytes, null, X509KeyStorageFlags.Exportable);
+            //var certificate = coll[0];
 
             services.AddIdentityServer(
                     options =>
@@ -105,8 +99,7 @@
                             options.UserInteraction.LogoutUrl = "/api/user/logout";
                         })
                 .AddAspNetIdentity<User>()
-                .AddSigningCredential(certificate)
-                .AddValidationKey(certificate)
+                .AddDeveloperSigningCredential()
                 .AddConfigurationStore<AppDbContext>()
                 .AddConfigurationStoreCache()
                 .AddOperationalStore<AppDbContext>();
@@ -173,9 +166,6 @@
             services.AddSingleton<IEmailSender, EmailSender>();
             services.Configure<SendGridClientOptions>(_configuration.GetSection("SendGrid"));
 
-            // Antiforgery
-            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
-
             // Enforce SSL
             services.Configure<MvcOptions>(options =>
             {
@@ -221,7 +211,6 @@
                 });
 
             app.UseIdentityServer();
-            app.UseAntiforgeryToken();
 
             app.UseHttpsRedirection();
 

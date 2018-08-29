@@ -25,7 +25,7 @@
           </mat-error>
         </mat-form-field>
       </fieldset>
-      <mat-error *ngIf="registrationForm.hasError('missingIdentity')">
+      <mat-error class="InformationalError" *ngIf="registrationForm.hasError('missingIdentity')">
         You need to give either your <strong>first name and last name</strong> or a <strong>username</strong>
       </mat-error>
       <mat-form-field>
@@ -58,7 +58,7 @@
     </article>
     <article>
       <div class="dropzone" [class.centerDropzone]="uploadingPicture" dnd-droppable (onDropSuccess)="transferDataSuccess($event)" (click)="Files.click()">
-          <mat-error *ngIf="picturesFormControl.hasError('notEnough') && !uploadingPicture">
+          <mat-error class="InformationalError" *ngIf="picturesFormControl.hasError('notEnough') && !uploadingPicture">
               You need to provide at least <strong>5</strong> pictures.
           </mat-error>
           <mat-error *ngIf="improperFace && !uploadingPicture">

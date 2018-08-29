@@ -23,7 +23,6 @@
         }
 
         [HttpPost]
-        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> AuthenticatorCodeCheck([FromBody] Login2faUser authenticationUser)
         {
             authenticationUser.ReturnUrl = authenticationUser.ReturnUrl ?? Url.Content("~/");

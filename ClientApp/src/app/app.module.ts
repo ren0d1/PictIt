@@ -28,9 +28,6 @@ import { GalleryComponent } from './pages/gallery/gallery.component';
 
 import { OAuthModule } from 'angular-oauth2-oidc';
 
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
-
 // AoT requires an exported function for factories
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -76,7 +73,6 @@ export function createTranslateLoader(http: HttpClient) {
           deps: [HttpClient]
       }
     }),
-    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     Routing
   ],
   providers: [],
