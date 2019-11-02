@@ -1,0 +1,20 @@
+main {
+    width: 97.5%;
+    height: 80vh;
+    margin: 1rem;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.consentForm{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.mat-slide-toggle, .mat-checkbox, .mat-raised-button {
+    margin: 1rem;
+}
