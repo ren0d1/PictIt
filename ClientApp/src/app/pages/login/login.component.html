@@ -1,0 +1,36 @@
+<main>
+  <div class="externalLogins" *ngIf="!sent">
+    <button mat-raised-button color="primary" *ngFor="let provider of availableProviders" (click)="externalLogin(provider.name)">{{provider.displayName}}</button>  
+  </div>
+  <form class="loginForm" [hidden]="sent" id="LoginForm" name="LoginForm" [formGroup]="loginForm" autocomplete="on" (submit)="sendForm()">
+    <mat-form-field>
+      <input matInput type="email" form="LoginForm" name="Email" placeholder="Email" [formControl]="emailFormControl" autocomplete="email" maxlength="255">
+      <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+        Please enter a valid email address
+      </mat-error>
+      <mat-error *ngIf="emailFormControl.hasError('required')">
+        Email address is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="emailFormControl.hasError('wrongcode')">
+        Email OR password is <strong>not valid</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [type]="showPassword ? 'text' : 'password'" form="LoginForm" name="Password" placeholder="Password" [formControl]="passwordFormControl" autocomplete="current-password">
+      <mat-icon matSuffix (click)="showPassword = !showPassword">{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+      <mat-error *ngIf="passwordFormControl.hasError('required')">
+        Password is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="emailFormControl.hasError('wrongcode')">
+        Email OR password is <strong>not valid</strong>
+      </mat-error>
+    </mat-form-field>
+    <input type="hidden" name="ReturnUrl" value="{{returnUrl}}">
+    <button mat-raised-button type="submit" color="primary" form="LoginForm" [disabled]="!loginForm.valid">Login</button>
+    <a class="forgot-password" *ngIf="!sent" [routerLink]="['/forgot-password']">Forgot password?</a>
+  </form>
+  <div *ngIf="sent" class="bar">
+    <div class="circle"></div>
+    <p>Logging in in progress</p>
+  </div>
+</main>

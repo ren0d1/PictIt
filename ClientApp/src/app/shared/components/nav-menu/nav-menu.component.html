@@ -1,0 +1,29 @@
+<mat-sidenav-container class="nav-menu" color="primary">
+    <mat-sidenav-content>
+        <mat-toolbar color="primary">
+            <button mat-raised-button (click)="home()">
+                <mat-icon>home</mat-icon>
+                PictIt
+            </button>
+            <button mat-icon-button style="margin-left: auto" [matMenuTriggerFor]="languagesMenu">
+                <mat-icon>translate</mat-icon>
+            </button>
+            <mat-menu #languagesMenu="matMenu">
+                <button mat-menu-item *ngFor="let languageCode of availableLanguagesCode" (click)="setLanguage(languageCode)">
+                    <mat-icon [ngClass]="'flag-icon flag-icon-' + availableLanguagesInformations.get(languageCode).countryAlphaCode"></mat-icon>
+                    <span>{{ availableLanguagesInformations.get(languageCode).languageName }}</span>
+                </button>
+            </mat-menu>
+            <button *ngIf="oauthService.hasValidIdToken()" mat-icon-button (click)="profile()">
+                <mat-icon>account_circle</mat-icon>
+            </button>
+            <button *ngIf="oauthService.hasValidIdToken()" mat-icon-button (click)="logout()">
+                <mat-icon style="color: yellowgreen">settings_power</mat-icon>
+            </button>
+            <button *ngIf="!oauthService.hasValidIdToken()" mat-icon-button (click)="login()">
+                <mat-icon style="color: indianred">settings_power</mat-icon>
+            </button>
+        </mat-toolbar>
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>

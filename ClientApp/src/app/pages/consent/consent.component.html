@@ -1,0 +1,38 @@
+<main>
+  <h1 *ngIf="consentRequest">{{consentRequest.subject}} is requesting the following permissions:</h1>
+  <form class="consentForm" *ngIf="consentRequest" id="ConsentForm" #ConsentForm name="ConsentForm" [formGroup]="consentForm" action="/api/user/consent" method="POST">
+    <mat-slide-toggle *ngFor="let scope of requestedIdentityScopes" form="ConsentForm" name="{{scope.name}}" color="primary" formControlName="{{scope.name}}">
+      <ng-container *ngIf="scope.description; then detailed; else notDetailed">
+      </ng-container>
+  
+      <ng-template #emphasized>
+        <em>
+          {{scope.displayName}}<sup *ngIf="scope.required">*</sup>
+        </em>
+      </ng-template>
+      <ng-template #notEmphasized>
+        {{scope.displayName}}<sup *ngIf="scope.required">*</sup>
+      </ng-template>
+  
+      <ng-template #detailed>
+        <dl>
+          <dt>
+            <ng-container *ngIf="scope.emphasize; then emphasized; else notEmphasized">
+            </ng-container>
+          </dt>
+          <dd>
+            {{scope.description}}
+          </dd>
+        </dl>
+      </ng-template>
+      <ng-template #notDetailed>
+        <ng-container *ngIf="scope.emphasize; then emphasized; else notEmphasized">
+        </ng-container>
+      </ng-template>
+    </mat-slide-toggle>
+    <mat-checkbox form="ConsentForm" name="RememberMe" value="true" color="primary">I want you to remember my choice</mat-checkbox>
+    <input type="hidden" name="ReturnUrl" value="{{returnUrl}}">
+    <button mat-raised-button type="submit" color="primary" form="ConsentForm" (click)="ConsentForm.submit()" [disabled]="!consentForm.valid">Consent</button>
+  </form>
+  <i *ngIf="consentRequest">* indicates a required permission grant.</i>
+</main>

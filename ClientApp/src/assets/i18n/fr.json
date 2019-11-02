@@ -1,0 +1,7 @@
+{
+    "NAV-MENU": {
+        "NAME": "Bienvenue, {{value}}!",
+        "ENGLISH": "Anglais",
+        "FRENCH": "Français"
+    }
+}

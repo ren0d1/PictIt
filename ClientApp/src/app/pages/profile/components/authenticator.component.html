@@ -1,0 +1,45 @@
+<main>
+    <h1>To use an authenticator app go through the following steps:</h1>
+    <ol class="list">
+        <li>
+            <p>
+                Download a two-factor authenticator app like Microsoft Authenticator for
+                <a href="https://go.microsoft.com/fwlink/?Linkid=825071">Windows Phone</a>,
+                <a href="https://go.microsoft.com/fwlink/?Linkid=825072">Android</a> and
+                <a href="https://go.microsoft.com/fwlink/?Linkid=825073">iOS</a> or
+                Google Authenticator for
+                <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&amp;hl=en">Android</a> and
+                <a href="https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8">iOS</a>.
+            </p>
+        </li>
+        <li>
+            <p>Scan the QR Code or enter this key <kbd>{{authenticator.sharedKey}}</kbd> into your two factor authenticator app. Spaces and casing do not matter.</p>
+            <ngx-qrcode 
+            [qrc-value] = "authenticator.authenticatorUri"
+            qrc-class = "aclass"
+            qrc-errorCorrectionLevel = "L">
+            </ngx-qrcode>
+        </li>
+        <li>
+            <p>
+                Once you have scanned the QR code or input the key above, your two factor authentication app will provide you
+                with a unique code. Enter the code in the confirmation box below.
+            </p>
+            <form id="AuthenticatorForm" name="AuthenticatorForm" [formGroup]="authenticatorForm" (submit)="sendForm()">
+                <mat-form-field>
+                    <input matInput type="text" form="AuthenticatorForm" name="TwoFactorCode" placeholder="Verification code" [formControl]="twoFactorCodeFormControl" minlength="6" maxlength="8">
+                    <mat-error *ngIf="(twoFactorCodeFormControl.hasError('minlength') || twoFactorCodeFormControl.hasError('maxlength')) && !twoFactorCodeFormControl.hasError('required')">
+                        Varification code must be at least 6 and at max 8 characters long.
+                    </mat-error>
+                    <mat-error *ngIf="twoFactorCodeFormControl.hasError('required')">
+                        Verification code is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="twoFactorCodeFormControl.hasError('wrongcode')">
+                        Verification code is <strong>not valid</strong>
+                    </mat-error>
+                </mat-form-field>
+                <button mat-raised-button type="submit" color="primary" form="AuthenticatorForm" [disabled]="!authenticatorForm.valid">Verify</button>
+            </form>
+        </li>
+    </ol>
+</main>
