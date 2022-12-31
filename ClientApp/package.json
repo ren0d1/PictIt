@@ -42,12 +42,12 @@
     "oidc-client": "^1.5.2",
     "rxjs": "^6.2.2",
     "rxjs-compat": "^6.2.2",
-    "ts-loader": "^4.5.0",
+    "ts-loader": "^9.4.2",
     "xregexp": "^4.2.0",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.7.5",
+    "@angular-devkit/build-angular": "^15.0.4",
     "@angular/cli": "^6.1.5",
     "@angular/compiler-cli": "^6.1.4",
     "@angular/language-service": "^6.1.4",
